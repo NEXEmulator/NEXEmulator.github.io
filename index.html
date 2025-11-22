@@ -5,102 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEX Documentation</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background:
-                linear-gradient(#ffffff08 1px, transparent 1px) 0 0 / 40px 40px,
+            background: linear-gradient(#ffffff08 1px, transparent 1px) 0 0 / 40px 40px,
                 linear-gradient(90deg, #ffffff08 1px, transparent 1px) 0 0 / 40px 40px,
-                linear-gradient(90deg, #FF94CE40, #C579E540, #7496FC40),
-                #000;
+                linear-gradient(90deg, #FF94CE40, #C579E540, #7496FC40), #000;
             background-attachment: fixed;
             min-height: 100vh;
             color: #fff;
         }
-
         header {
             padding: 30px 60px;
             display: flex;
             align-items: center;
             gap: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255,255,255,0.15);
         }
-
-        .logo-text {
-            font-size: 32px;
-            font-weight: 900;
-            letter-spacing: 3px;
-            color: #fff;
-        }
-
-        .container {
-            display: flex;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
+        .logo-text { font-size: 32px; font-weight: 900; letter-spacing: 3px; color: #fff; }
+        .container { display: flex; max-width: 1600px; margin: 0 auto; }
         .sidebar {
             width: 300px;
             padding: 40px 30px;
-            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            border-right: 1px solid rgba(255,255,255,0.15);
             min-height: calc(100vh - 121px);
+            position: relative;
         }
-
         .sidebar h3 {
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255,255,255,0.5);
             margin-bottom: 20px;
             font-weight: 600;
         }
-
+        .nav-container { position: relative; }
+        .nav-highlight {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 0;
+        }
         .nav-item {
             display: block;
             padding: 15px 20px;
             margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255,255,255,0.7);
             text-decoration: none;
             border-radius: 8px;
-            transition: all 0.3s;
+            transition: color 0.3s;
             font-weight: 500;
             font-size: 16px;
-            border: 1px solid transparent;
             cursor: pointer;
+            position: relative;
+            z-index: 1;
         }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .content {
-            flex: 1;
-            padding: 60px 80px;
-        }
-
+        .nav-item:hover { color: #fff; }
+        .nav-item.active { color: #fff; font-weight: 600; }
+        .content { flex: 1; padding: 60px 80px; overflow: hidden; position: relative; }
         .content h1 {
             font-size: 56px;
             margin-bottom: 30px;
             color: #fff;
             font-weight: 900;
             padding-bottom: 30px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 2px solid rgba(255,255,255,0.2);
         }
-
         .content h2 {
             font-size: 36px;
             margin-top: 60px;
@@ -108,431 +81,792 @@
             color: #fff;
             font-weight: 700;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255,255,255,0.15);
         }
-
         .content h3 {
             font-size: 24px;
             margin-top: 35px;
             margin-bottom: 15px;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255,255,255,0.9);
             font-weight: 600;
+            display: inline-block;
         }
-
         .content p {
             line-height: 1.8;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255,255,255,0.7);
             margin-bottom: 20px;
             font-size: 16px;
         }
-
-        .code-block {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .func-header {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+        .func-header h3 { margin: 0; }
+        h3p {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+            font-family: 'Courier New', monospace;
+            vertical-align: middle;
+            position: relative;
+            cursor: help;
+            transition: all 0.2s ease;
+        }
+        h3p:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.4);
+        }
+        .tooltip {
+            position: fixed;
+            background: rgba(20,20,30,0.98);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            padding: 14px 18px;
+            max-width: 320px;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+        .tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tooltip-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tooltip-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #FF94CE, #7496FC);
+            border-radius: 50%;
+        }
+        .tooltip-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .tooltip-funcs {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 10px;
+        }
+        .tooltip-funcs span {
+            color: #C586C0;
+            font-family: 'Courier New', monospace;
+        }
+        .code-block, .code-blockx {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 12px;
             padding: 25px;
             margin: 25px 0;
             overflow-x: auto;
             font-family: 'Courier New', monospace;
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
             line-height: 1.6;
             white-space: pre;
         }
-
-        .code-blockx {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 25px 0;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre;
+        .code-block { color: rgba(255,255,255,0.9); }
+        .sections-wrapper {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .section {
-            display: none;
+            min-width: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-
-        .section.active {
-            display: block;
-        }
-
+        .section.active { opacity: 1; }
+        .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 40px 0; }
         @media (max-width: 768px) {
-            header {
-                padding: 20px 30px;
-            }
-
-            .logo-text {
-                font-size: 24px;
-                letter-spacing: 2px;
-            }
-
-            .container {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                min-height: auto;
-                padding: 20px 30px;
-                border-right: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            }
-
-            .sidebar h3 {
-                margin-bottom: 15px;
-            }
-
-            .nav-item {
-                padding: 12px 15px;
-                font-size: 14px;
-            }
-
-            .content {
-                padding: 30px 30px;
-            }
-
-            .content h1 {
-                font-size: 36px;
-                margin-bottom: 20px;
-                padding-bottom: 20px;
-            }
-
-            .content h2 {
-                font-size: 28px;
-                margin-top: 40px;
-                margin-bottom: 20px;
-            }
-
-            .content h3 {
-                font-size: 20px;
-                margin-top: 25px;
-                margin-bottom: 12px;
-            }
-
-            .content p {
-                font-size: 15px;
-            }
-
-            .code-block, .code-blockx {
-                padding: 20px;
-                font-size: 13px;
-            }
+            header { padding: 20px 30px; }
+            .logo-text { font-size: 24px; letter-spacing: 2px; }
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; min-height: auto; padding: 20px 30px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); }
+            .nav-item { padding: 12px 15px; font-size: 14px; }
+            .content { padding: 30px; }
+            .content h1 { font-size: 36px; margin-bottom: 20px; padding-bottom: 20px; }
+            .content h2 { font-size: 28px; margin-top: 40px; }
+            .content h3 { font-size: 20px; }
+            .func-header { flex-direction: column; align-items: flex-start; gap: 8px; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo-text">NEX Documentation</div>
-    </header>
-
+    <header><div class="logo-text">NEX Documentation</div></header>
     <div class="container">
         <aside class="sidebar">
             <h3>Documentation</h3>
-            <a class="nav-item active" data-tab="functions">NEX Functions</a>
-            <a class="nav-item" data-tab="qol">QoL Functions</a>
-            <a class="nav-item" data-tab="compiling">Compiling</a>
-            <a class="nav-item" data-tab="plugins">Plugins</a>
-            <a class="nav-item" data-tab="settings">Settings</a>
+            <div class="nav-container">
+                <div class="nav-highlight"></div>
+                <a class="nav-item active" data-tab="0">Functions</a>
+                <a class="nav-item" data-tab="1">Compiling</a>
+                <a class="nav-item" data-tab="2">Settings</a>
+            </div>
         </aside>
-
         <main class="content">
-            <div id="functions" class="section active">
-                <h1>NEX Functions</h1>
-                <h3>LoadLocalAsset(filepath:string):Instance</h3>
-                <p>Loads the specified file and returns the loaded object.</p>
-
-                <h3>Example Usage</h3>
-                <div class="code-blockx">local FilePath="Object.rbxm"
-local FileData=FILEDATA
+            <div class="sections-wrapper">
+                <div class="section active">
+                    <h1>Functions</h1>
+                    <div class="func-header"><h3>LoadLocalAsset(filepath:string):Instance</h3><h3p>FilesEnabled</h3p></div>
+                    <p>Loads a Roblox model file (.rbxm, .rbxmx) from the local environment specified by the `filepath` and returns the loaded instance object.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">local FilePath="Tool.rbxm"
+local FileData=-- [[ large string of data ]]
 repeat task.wait() until NEX_Loaded
 if not Settings.FilesEnabled then
-warn("Please turn on FilesEnabled in settings!")
+    warn("Please turn on FilesEnabled in settings!")
 end
-writefile(FilePath,FileData)
-repeat task.wait() until isfile(FilePath) --reccommended
-local Object=LoadLocalAsset(FilePath)
---Code using the Object</div>
-              <p>Accuracy: NEX Developed</p>
-    <h2></h2>
-    <h3>getcustomasset(filepath:string, content:string):string</h3>
-    <p>Creates a rbxasset with the provided content and returns it.</p>
 
-    <h3>Example Usage</h3>
-    <div class="code-blockx">local FilePath="flower.png"
-local FileData=FILEDATA
-repeat task.wait() until NEX_Loaded
-if not Settings.FilesEnabled then
-warn("Please enable FilesEnabled in settings!")
-end
-writefile(FilePath,FileData)
+writefile(FilePath, FileData)
 repeat task.wait() until isfile(FilePath)
-local rbxasset=getcustomasset(FilePath)
---example usage: Classes.Tool.Texture=rbxasset
---example return: rbxassetid://aoNeizgs.png</div>
-              <p>Accuracy: NEX Developed</p>
-              <h2></h2>
-              <h3>InsertAsset(AssetId:string):Instance</h3>
-              <p>Loads the AssetId and returns the loaded object.</p>
-              <h3>Example Usage</h3>
-              <div class="code-blockx">local FilePath="rbxassetid://ID"
+local Object = LoadLocalAsset(FilePath)
+Object.Parent = game.Players.LocalPlayer.Backpack 
+print("Loaded and parented:", Object.Name)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>getcustomasset(filepath:string):string</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Uploads a local file (e.g., an image, audio) specified by `filepath` to a temporary content system and returns the resulting rbxassetid:// string URL.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">local ImagePath="flower.png"
 repeat task.wait() until NEX_Loaded
-local Object=LoadLocalAsset(FilePath)
---Code using the Object</div>
-              <p>Accuracy: NEX Approved</p>
-                <h2></h2>
-                <h3>ToastNotify(Table{Title,Text,Icon}:table):string</h3>
-                <p>Sends an offical Toast notification with the specified table properties.</p>
-                
-                <h3>Example Usage</h3>
-                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+
+local rbxasset = getcustomasset(ImagePath)
+print("Asset ID:", rbxasset)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>InsertAsset(AssetId:string):Instance</h3>
+                    <p>Loads an asset directly from the Roblox website using its `AssetId` and returns the loaded instance object.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">local AssetId="123456789"
+repeat task.wait() until NEX_Loaded
+
+local Object = InsertAsset("rbxassetid://" .. AssetId)
+if Object then
+    Object.Parent = game.Workspace
+    print("Inserted asset:", Object.Name)
+end</div>
+                    <p>Accuracy: NEX Approved</p>
+                    <div class="divider"></div>
+
+                    <h3>ToastNotify(options:table):null</h3>
+                    <p>Sends a native desktop-style toast notification with the specified properties provided in the `options` table.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
 ToastNotify({
     Title="NEX Emulator",
-    Text="NEX",
-    Icon=("rbxassetid://id" or CustomAsset)
+    Text="The script successfully executed.",
+    Icon="rbxassetid://1347201659"
 })</div>
                     <p>Accuracy: Unaccurate (There are more properties that we don't know of.)</p>
-                <h2></h2>
-                <h3>DisconnectFromServer(null):null</h3>
-                <p>Destroys ClientReplicator for effiency, should be used on singleplayer games that do not contain class.Script (class.LocalScript is not affected)</p>
-                <p>Accuracy: NEX Developed</p>
-                <h2></h2>
-                <h3>GetCurrentThread(null):thread</h3>
-                <p>Returns the environment that it had been loaded in's thread.</p>
-                <h3>Example Usage</h3>
-                <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local CurrentThread=GetCurrentThread()
---code that uses the current thread for some reason. (You could kill the script when it ends for security and effiency?)</div>
-                <p>Accuracy: NEX Developed</p>
-                <h2></h2>
-                <h3>getrenv(null):table</h3>
-                <p>Returns the unedited Roblox environment usually used inside RobloxScripts.</p>
-                <p>Accuracy: NEX Developed</p>
-                <h2></h2>
-                <h3>clonefunction(function):function</h3>
-                <p>Returns a cloned version of the inputted function. (Unaffected by hookfunction)</p>
-                <p>Accuracy: NEX Developed</p>
-                                <h2></h2>
-                <h3>GetRegisteredInstances(null):table</h3>
-                <p>Returns all instances found in Luau's registry. (This does not include non-Instance classed classes such as AuroraScriptService)</p>
-                <p>Accuracy: NEX Developed</p>
-                <h2></h2>
-                <h3>File Functions</h3>
-                <p>readfile(filepath:string):string,
-                   writefile(filepath:string,content:string):null,
-                   makefolder(filepath:string):null,
-                   deletefile(filepath:string):null, 
-                   deletefolder(filepath:string):null,
-                   isfile(filepath:string):boolean,
-                   isfolder(filepath:string):boolean,
-                   appendfile(filepath:string,content:string):null,
-                   listfiles(filepath:string):table,
-                   loadfile(filepath:string):function</p>
-                <p>Accuracy: NEX Developed</p>
-                <h2></h2>
-                <h3>Raw Functions</h3>
-                <p>rawsetmetatable(table:userdata/table,content:table):null
-                   rawgetmetatable(table:userdata/table):table
-                </p>
-                <p>Accuracy: NEX Developed</p>
-            </div>
+                    <div class="divider"></div>
 
-            <div id="qol" class="section">
-                <h1>Quality of Life Functions</h1>
+                    <h3>DisconnectFromServer(null):null</h3>
+                    <p>Immediately disconnects the client from the current Roblox server.</p>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h2>example section</h2>
-                <h3>example method</h3>
-                <p>example description</p>
+                    <h3>GetCurrentThread(null):thread</h3>
+                    <p>Returns the native Luau thread object for the environment in which the function is called.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local CurrentThread = GetCurrentThread()
+print("Current Thread:", typeof(CurrentThread))</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h3>example code</h3>
-                <div class="code-blockx">-- example script</div>
+                    <h3>getrenv(null):table</h3>
+                    <p>Returns the Roblox Environment (renv), which is the global table used by core Roblox scripts.</p>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h2>example section</h2>
-                <h3>example method</h3>
-                <p>example description</p>
+                    <h3>clonefunction(func:function):function</h3>
+                    <p>Returns a cloned, exact copy of the inputted Luau `func`. The cloned function is not affected by later calls to `hookfunction` on the original.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local original_func = print
+local cloned_print = clonefunction(original_func)
 
-                <h3>example code</h3>
-                <div class="code-block">-- example script</div>
-            </div>
+hookfunction(print, function() warn("Hooked!") end)
 
-            <div id="compiling" class="section">
-                <h1>Compiling</h1>
+cloned_print("This is not hooked.")
+print("This IS hooked.")</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h2>example section</h2>
-                <h3>example method</h3>
-                <p>example description</p>
+                    <h3>GetRegisteredInstances(null):table</h3>
+                    <p>Returns a table containing a reference to most instances that exist within Luau's internal state.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local all_instances = GetRegisteredInstances()
+local part_count = 0
 
-                <h3>example code</h3>
-                <div class="code-blockx">-- example script</div>
+for _, instance in pairs(all_instances) do
+    if instance:IsA("Part") then
+        part_count = part_count + 1
+    end
+end
 
-                <h2>example section</h2>
-                <h3>example method</h3>
-                <p>example description</p>
+print("Total registered instances:", #all_instances)
+print("Total parts found:", part_count)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h3>example code</h3>
-                <div class="code-block">-- example script</div>
-            </div>
+                    <h3>rawsetmetatable(table:userdata/table, content:table):null</h3>
+                    <p>Sets the metatable for the given `table` or `userdata` without triggering metamethods like `__metatable`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local myTable = {}
+local newMetatable = {
+    __index = function(t, k)
+        return "Intercepted: " .. k
+    end
+}
 
-            <div id="plugins" class="section">
-                <h1>Plugins</h1>
+rawsetmetatable(myTable, newMetatable)
+print("Accessing unknown key:", myTable.someKey)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h2>example section</h2>
-                <h3>example method</h3>
-                <p>example description</p>
+                    <h3>rawgetmetatable(table:userdata/table):table</h3>
+                    <p>Retrieves the metatable of the given `table` or `userdata` without triggering metamethods like `__metatable`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local myObject = Instance.new("Part")
+local objectMetatable = rawgetmetatable(myObject)
+print("Metatable Retrieved:", typeof(objectMetatable))</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h3>example code</h3>
-                <div class="code-blockx">-- example plugin</div>
+                    <div class="func-header"><h3>readfile(filepath:string):string</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Reads the content of the file located at `filepath` and returns it as a string.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local path = "MyData.txt"
 
-                <h2>example section</h2>
-                <h3>example method</h3>
-                <p>example description</p>
+if isfile(path) then
+    local content = readfile(path)
+    print("File Content:", content)
+else
+    warn("File does not exist!")
+end</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h3>example code</h3>
-                <div class="code-block">-- example plugin</div>
-            </div>
+                    <div class="func-header"><h3>writefile(filepath:string, content:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Writes the specified `content` string to the file located at `filepath`. If the file does not exist, it is created.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local path = "MyLog.txt"
+local data = "This data will overwrite the file."
 
-            <div id="settings" class="section">
-                <h1>Settings</h1>
+writefile(path, data)
+print("Content written to", path)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h2>example section</h2>
-                <h3>example method</h3>
-                <p>example description</p>
+                    <div class="func-header"><h3>makefolder(filepath:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Creates a new folder (directory) at the specified `filepath`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local folder_path = "NEX/Scripts/AutoExecute"
+makefolder(folder_path)
+print("Folder created:", folder_path)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h3>example code</h3>
-                <div class="code-blockx">-- example script</div>
+                    <div class="func-header"><h3>deletefile(filepath:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Deletes the file located at `filepath`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local path = "TempFile.tmp"
 
-                <h2>example section</h2>
-                <h3>example method</h3>
-                <p>example description</p>
+if isfile(path) then
+    deletefile(path)
+    print("File deleted:", path)
+end</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
 
-                <h3>example code</h3>
-                <div class="code-block">-- example script</div>
+                    <div class="func-header"><h3>deletefolder(filepath:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Deletes the folder (directory) located at `filepath`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local folder_path = "TempFolder"
+
+if isfolder(folder_path) then
+    deletefolder(folder_path)
+    print("Folder deleted:", folder_path)
+end</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>isfile(filepath:string):boolean</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Returns `true` if a file exists at the specified `filepath`, otherwise returns `false`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local path = "Config.json"
+
+if isfile(path) then
+    print("Config file exists!")
+end</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>isfolder(filepath:string):boolean</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Returns `true` if a folder exists at the specified `filepath`, otherwise returns `false`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local path = "Plugins"
+
+if isfolder(path) then
+    print("Plugins folder exists!")
+end</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>appendfile(filepath:string, content:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Appends the specified `content` string to the end of the file located at `filepath`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local path = "GameLog.txt"
+local new_entry = "\n[INFO] Player joined at " .. os.date()
+
+appendfile(path, new_entry)
+print("Entry appended to log.")</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>listfiles(filepath:string):table</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Returns a table containing a list of all files and folders within the directory specified by `filepath`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local path = "Scripts"
+
+local files = listfiles(path)
+print("Files in 'Scripts' folder:")
+
+for i, file_name in pairs(files) do
+    print(i, file_name)
+end</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>loadfile(filepath:string):function</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
+                    <p>Loads a Luau script from the file located at `filepath` and returns it as a function.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local path = "MyScript.lua"
+
+if isfile(path) then
+    local loaded_script = loadfile(path)
+    if typeof(loaded_script) == "function" then
+        print("Executing loaded file...")
+        loaded_script()
+    end
+else
+    warn("Script file not found!")
+end</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>loadstring(str:string, chunkname:string):function, nil + string</h3>
+                    <p>Loads a string of Luau code and returns it as a function. The optional `chunkname` is used for error messages.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local function_to_run = loadstring("print('Hello from loadstring!')", "MyChunk")
+if function_to_run then
+    function_to_run()
+else
+    warn("Failed to loadstring")
+end</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>setreadonly(table:table, readonly:boolean):null</h3>
+                    <p>Sets the read-only status of a table. If `readonly` is true, the table cannot be modified.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local myTable = {a = 1, b = 2}
+setreadonly(myTable, true)
+
+myTable.a = 5 
+print(myTable.a) -- Output is still 1
+
+setreadonly(myTable, false)
+myTable.a = 10
+print(myTable.a) -- Output is 10</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>hookfunction(original:function, hook:function):function</h3>
+                    <p>Replaces the `original` function with the `hook` function. Returns the original function.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local original_print = print
+local function hooked_print(original_func, ...)
+    warn("Print was called!")
+    return original_func(...)
+end
+
+hookfunction(print, hooked_print)
+print("This will trigger the hook.")</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>setidentity(level:number):null</h3><h3p>CapabilityMax</h3p></div>
+                    <p>Changes the execution identity (privilege level) of the current thread to the specified `level`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local current_identity = getthreadidentity()
+print("Current Identity:", current_identity)
+
+setidentity(8)
+print("New Identity:", getthreadidentity())
+
+setidentity(current_identity)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>getthreadidentity(null):number</h3>
+                    <p>Returns the current execution identity (privilege level) of the calling thread.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local identity_level = getthreadidentity()
+print("The current thread's identity level is:", identity_level)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>request(options:table):table</h3><h3p>HTTPEnabled</h3p></div>
+                    <p>Performs an HTTP request using the properties specified in the `options` table. Returns a table containing the response data.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local options = {
+    Url = "https://example.com/api/data",
+    Method = "GET",
+    Headers = {
+        ["Content-Type"] = "application/json",
+        ["Authorization"] = "Bearer token"
+    },
+    Body = nil
+}
+
+local response = request(options)
+
+print("Status Code:", response.StatusCode)
+print("Body:", response.Body)</div>
+                    <p>Accuracy: NEX Approved</p>
+                    <div class="divider"></div>
+
+                    <h3>getsenv(instance:Instance):table</h3>
+                    <p>Returns the Script Environment of the given `instance` (typically a `LocalScript` or `Script`).</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local target_script = game.StarterPlayer.StarterPlayerScripts.MyScript
+local script_env = getsenv(target_script)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>newcclosure(func:function):function</h3>
+                    <p>Creates a new C-closure from a Luau function. C-closures are more resilient to certain forms of inspection.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local function my_luau_func(a, b)
+    return a + b
+end
+
+local c_closure = newcclosure(my_luau_func)
+local result = c_closure(5, 7)
+print("Result of C-closure:", result)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>newlclosure(func:function, env:table):function</h3>
+                    <p>Creates a new Luau closure from a function, optionally binding it to a custom `env` table.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local custom_env = {
+    CustomGlobal = "Hello!"
+}
+
+local function my_luau_func()
+    print(CustomGlobal)
+end
+
+local l_closure = newlclosure(my_luau_func, custom_env)
+l_closure()</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>ReplicateSignal(signal:RBXScriptSignal):null</h3>
+                    <p>Replicates serversided RBXScriptSignals.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local signal = game.Players.LocalPlayer.Kill
+replicatesignal(signal)</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>GetConnections(signal:RBXScriptSignal):table</h3>
+                    <p>Returns a table containing all active `RBXScriptConnection` objects connected to the specified `signal`.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local signal = game.Players.LocalPlayer.CharacterAdded
+
+local conn = signal:Connect(function() end)
+
+local connections = GetConnections(signal)
+print("Number of connections:", #connections)
+conn:Disconnect()</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <h3>CloneReference(reference:userdata):userdata</h3>
+                    <p>Returns a reference to the given userdata, it is not affected by any edits to the original reference.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local original_instance = game
+local cloned_instance = CloneReference(game)
+
+rawsetmetatable(cloned_instance,{})
+
+print(rawgetmetatable(game)==rawgetmetatable(cloned_instance)) --false</div>
+                    <p>Accuracy: NEX Developed</p>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>Rrequire(ModuleScript:ModuleScript):any</h3><h3p>RobloxScriptRequire</h3p></div>
+                    <p>Used to require RobloxScript modules.</p>
+                    <h3>Example Usage</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local SpecialModule=game.CorePackages.Packages.HttpRequest
+local RequiredSpecialModule=Rrequire(SpecialModule)</div>
+                    <p>Accuracy: NEX Developed</p>
+                </div>
+
+                <div class="section">
+                    <h1>Compilation</h1>
+                    <p>Documentation for compilation coming soon.</p>
+                </div>
+
+                <div class="section">
+                    <h1>Settings</h1>
+                    <h3>Lua accessability for settings</h3>
+                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print(Settings["Setting"])</div>
+                    <div class="divider"></div>
+                    <h3>CapabilityMax:number</h3>
+                    <p>The maximum capability for setidentity.</p>
+                    <div class="divider"></div>
+                    <h3>FilesEnabled:boolean</h3>
+                    <p>The permission to enable file functions.</p>
+                    <div class="divider"></div>
+                    <h3>EmulateOnGameIsLoaded:boolean</h3>
+                    <p>The setting which makes NEX only load when the game is loaded.</p>
+                    <div class="divider"></div>
+                    <h3>HTTPEnabled:boolean</h3>
+                    <p>The permission to enable HTTP functions.</p>
+                    <div class="divider"></div>
+                    <h3>RobloxScriptRequire:boolean</h3>
+                    <p>The permission to enable the custom function Rrequire.</p>
+                    <div class="divider"></div>
+                    <h3>ExternalFilePerms:boolean</h3>
+                    <p>The permission to enable ExternalFileFunctions.</p>
+                    <div class="divider"></div>
+                    <h3>DebugMode:boolean</h3>
+                    <p>The setting to turn on debugging.</p>
+                </div>
             </div>
         </main>
     </div>
-
     <script>
         const nav = document.querySelectorAll('.nav-item');
-        const pages = document.querySelectorAll('.section');
+        const wrapper = document.querySelector('.sections-wrapper');
+        const sections = document.querySelectorAll('.section');
+        const highlight = document.querySelector('.nav-highlight');
+        let currentTab = 0;
 
-        nav.forEach(function(item) {
-            item.addEventListener('click', function() {
-                const target = this.getAttribute('data-tab');
-                
-                nav.forEach(function(n) {
-                    n.classList.remove('active');
-                });
-                
-                pages.forEach(function(p) {
-                    p.classList.remove('active');
-                });
-                
-                this.classList.add('active');
-                document.getElementById(target).classList.add('active');
-            });
+        function updateHighlight(el) {
+            highlight.style.top = el.offsetTop + 'px';
+            highlight.style.left = el.offsetLeft + 'px';
+            highlight.style.width = el.offsetWidth + 'px';
+            highlight.style.height = el.offsetHeight + 'px';
+        }
+
+        function switchTab(idx) {
+            nav.forEach(n => n.classList.remove('active'));
+            nav[idx].classList.add('active');
+            updateHighlight(nav[idx]);
+            sections.forEach(s => s.classList.remove('active'));
+            wrapper.style.transform = `translateX(-${idx * 100}%)`;
+            setTimeout(() => sections[idx].classList.add('active'), 50);
+            currentTab = idx;
+        }
+
+        nav.forEach((item, idx) => {
+            item.addEventListener('click', () => switchTab(idx));
         });
+
+        updateHighlight(nav[0]);
+        sections[0].classList.add('active');
 
         function usyntax() {
             const blocks = document.querySelectorAll('.code-blockx');
-            
             for (let i = 0; i < blocks.length; i++) {
                 let code = blocks[i].textContent;
                 let result = '';
                 let pos = 0;
-                
                 const tokens = [];
-                
-                const stringMatch = /"[^"]*"/g;
                 let m;
-                while ((m = stringMatch.exec(code)) !== null) {
-                    tokens.push({start: m.index, end: m.index + m[0].length, type: 'string', val: m[0]});
-                }
-                
+                const stringMatch = /"[^"]*"/g;
+                while ((m = stringMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'string', val: m[0]});
                 const commentMatch = /--.*$/gm;
-                while ((m = commentMatch.exec(code)) !== null) {
-                    tokens.push({start: m.index, end: m.index + m[0].length, type: 'comment', val: m[0]});
-                }
-                
+                while ((m = commentMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'comment', val: m[0]});
                 const keywordMatch = /\b(local|function|end|if|then|else|elseif|for|while|do|repeat|until|return|break|in|and|or|not)\b/g;
-                while ((m = keywordMatch.exec(code)) !== null) {
-                    tokens.push({start: m.index, end: m.index + m[0].length, type: 'keyword', val: m[0]});
-                }
-                
-                const builtinMatch = /\b(print|pairs|ipairs|tonumber|tostring|type|pcall|require|getmetatable|setmetatable)\b/g;
-                while ((m = builtinMatch.exec(code)) !== null) {
-                    tokens.push({start: m.index, end: m.index + m[0].length, type: 'builtin', val: m[0]});
-                }
-                
+                while ((m = keywordMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'keyword', val: m[0]});
+                const builtinMatch = /\b(print|pairs|ipairs|tonumber|tostring|type|pcall|require|getmetatable|setmetatable|warn|typeof)\b/g;
+                while ((m = builtinMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'builtin', val: m[0]});
                 const numberMatch = /\b(\d+)\b/g;
-                while ((m = numberMatch.exec(code)) !== null) {
-                    tokens.push({start: m.index, end: m.index + m[0].length, type: 'number', val: m[0]});
-                }
-                
+                while ((m = numberMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'number', val: m[0]});
                 const boolMatch = /\b(true|false|nil)\b/g;
-                while ((m = boolMatch.exec(code)) !== null) {
-                    tokens.push({start: m.index, end: m.index + m[0].length, type: 'bool', val: m[0]});
-                }
-                
-                const propMatch = /([a-zA-Z_]\w*)\.|\\.([a-zA-Z_]\w*)/g;
-                while ((m = propMatch.exec(code)) !== null) {
-                    if (m[1]) {
-                        tokens.push({start: m.index, end: m.index + m[1].length, type: 'prop', val: m[1]});
-                    }
-                    if (m[2]) {
-                        tokens.push({start: m.index + 1, end: m.index + 1 + m[2].length, type: 'prop', val: m[2]});
-                    }
-                }
-                
-                tokens.sort(function(a, b) { return a.start - b.start; });
-                
+                while ((m = boolMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'bool', val: m[0]});
+                tokens.sort((a, b) => a.start - b.start);
                 const final = [];
                 for (let j = 0; j < tokens.length; j++) {
                     const tok = tokens[j];
                     let overlap = false;
                     for (let k = 0; k < final.length; k++) {
-                        if (tok.start < final[k].end && tok.end > final[k].start) {
-                            overlap = true;
-                            break;
-                        }
+                        if (tok.start < final[k].end && tok.end > final[k].start) { overlap = true; break; }
                     }
                     if (!overlap) final.push(tok);
                 }
-                
-                final.sort(function(a, b) { return a.start - b.start; });
-                
+                final.sort((a, b) => a.start - b.start);
                 for (let j = 0; j < final.length; j++) {
                     const tok = final[j];
                     result += code.substring(pos, tok.start);
-                    
-                    if (tok.type === 'string') {
-                        result += '<span style="color:#CE9178">' + tok.val + '</span>';
-                    } else if (tok.type === 'comment') {
-                        result += '<span style="color:#6A9955">' + tok.val + '</span>';
-                    } else if (tok.type === 'keyword') {
-                        result += '<span style="color:#C586C0">' + tok.val + '</span>';
-                    } else if (tok.type === 'builtin') {
-                        result += '<span style="color:#DCDCAA">' + tok.val + '</span>';
-                    } else if (tok.type === 'number') {
-                        result += '<span style="color:#B5CEA8">' + tok.val + '</span>';
-                    } else if (tok.type === 'bool') {
-                        result += '<span style="color:#569CD6">' + tok.val + '</span>';
-                    } else if (tok.type === 'prop') {
-                        result += '<span style="color:#9CDCFE">' + tok.val + '</span>';
-                    }
-                    
+                    if (tok.type === 'string') result += '<span style="color:#CE9178">' + tok.val + '</span>';
+                    else if (tok.type === 'comment') result += '<span style="color:#6A9955">' + tok.val + '</span>';
+                    else if (tok.type === 'keyword') result += '<span style="color:#C586C0">' + tok.val + '</span>';
+                    else if (tok.type === 'builtin') result += '<span style="color:#DCDCAA">' + tok.val + '</span>';
+                    else if (tok.type === 'number') result += '<span style="color:#B5CEA8">' + tok.val + '</span>';
+                    else if (tok.type === 'bool') result += '<span style="color:#569CD6">' + tok.val + '</span>';
                     pos = tok.end;
                 }
-                
                 result += code.substring(pos);
                 blocks[i].innerHTML = result;
             }
         }
-
         usyntax();
+
+        const tagInfo = {
+            'FilesEnabled': {
+                title: 'FilesEnabled',
+                desc: 'This setting must be enabled to use file system functions. Controls access to local file operations.',
+                funcs: ['LoadLocalAsset', 'getcustomasset', 'readfile', 'writefile', 'makefolder', 'deletefile', 'deletefolder', 'isfile', 'isfolder', 'appendfile', 'listfiles', 'loadfile']
+            },
+            'ExternalFilePerms': {
+                title: 'ExternalFilePerms',
+                desc: 'Additional permission required for external file operations. Must be enabled alongside FilesEnabled for most file functions.',
+                funcs: ['getcustomasset', 'readfile', 'writefile', 'makefolder', 'deletefile', 'deletefolder', 'isfile', 'isfolder', 'appendfile', 'listfiles', 'loadfile']
+            },
+            'HTTPEnabled': {
+                title: 'HTTPEnabled',
+                desc: 'Enables HTTP request functionality. Required for making web requests to external servers.',
+                funcs: ['request']
+            },
+            'CapabilityMax': {
+                title: 'CapabilityMax',
+                desc: 'Controls the maximum identity level that can be set. Determines the highest privilege level available.',
+                funcs: ['setidentity']
+            },
+            'RobloxScriptRequire': {
+                title: 'RobloxScriptRequire',
+                desc: 'Enables the ability to require RobloxScript modules from CorePackages and other protected locations.',
+                funcs: ['Rrequire']
+            }
+        };
+
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        document.body.appendChild(tooltip);
+
+        let tooltipTimeout;
+
+        document.querySelectorAll('h3p').forEach(tag => {
+            const tagName = tag.textContent.trim();
+            const info = tagInfo[tagName];
+            if (!info) return;
+
+            const showTooltip = (e) => {
+                clearTimeout(tooltipTimeout);
+                const funcList = info.funcs.map(f => `<span>${f}</span>`).join(', ');
+                tooltip.innerHTML = `
+                    <div class="tooltip-title">${info.title}</div>
+                    <div class="tooltip-desc">${info.desc}</div>
+                    <div class="tooltip-funcs">Used by: ${funcList}</div>
+                `;
+                
+                const rect = tag.getBoundingClientRect();
+                let left = rect.left;
+                let top = rect.bottom + 10;
+                
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
+                tooltip.classList.add('visible');
+                
+                requestAnimationFrame(() => {
+                    const tooltipRect = tooltip.getBoundingClientRect();
+                    if (tooltipRect.right > window.innerWidth - 20) {
+                        tooltip.style.left = (window.innerWidth - tooltipRect.width - 20) + 'px';
+                    }
+                    if (tooltipRect.bottom > window.innerHeight - 20) {
+                        tooltip.style.top = (rect.top - tooltipRect.height - 10) + 'px';
+                    }
+                });
+            };
+
+            const hideTooltip = () => {
+                tooltipTimeout = setTimeout(() => {
+                    tooltip.classList.remove('visible');
+                }, 100);
+            };
+
+            tag.addEventListener('mouseenter', showTooltip);
+            tag.addEventListener('mouseleave', hideTooltip);
+            tag.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (tooltip.classList.contains('visible')) {
+                    hideTooltip();
+                } else {
+                    showTooltip(e);
+                }
+            });
+        });
+
+        document.addEventListener('scroll', () => tooltip.classList.remove('visible'), true);
     </script>
 </body>
 </html>
