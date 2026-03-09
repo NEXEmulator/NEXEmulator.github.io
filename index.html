@@ -1,933 +1,1460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<head>
-
 <meta property="og:title" content="NEX Emulator">
 <meta property="og:description" content="The tool that turns Roblox into an actual game engine.">
 <meta property="og:image" content="https://i.imgur.com/w2Okbn4.png">
 <meta property="og:url" content="https://nexemulator.github.io/">
-
 <meta name="twitter:card" content="summary">
-
-</head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEX Documentation</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(#ffffff08 1px, transparent 1px) 0 0 / 40px 40px,
-                linear-gradient(90deg, #ffffff08 1px, transparent 1px) 0 0 / 40px 40px,
-                linear-gradient(90deg, #FF94CE40, #C579E540, #7496FC40), #000;
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: #fff;
-        }
-        header {
-            padding: 30px 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-        }
-        .header-buttons {
-            display: flex;
-            gap: 12px;
-        }
-        .header-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 10px;
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .header-btn:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(255,255,255,0.3);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-        .header-btn svg {
-            transition: transform 0.3s ease;
-        }
-        .header-btn:hover svg {
-            transform: scale(1.1);
-        }
-        .logo-text { font-size: 32px; font-weight: 900; letter-spacing: 3px; color: #fff; }
-        .container { display: flex; max-width: 1600px; margin: 0 auto; }
-        .sidebar {
-            width: 300px;
-            padding: 40px 30px;
-            border-right: 1px solid rgba(255,255,255,0.15);
-            min-height: calc(100vh - 121px);
-            position: relative;
-        }
-        .sidebar h3 {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        .nav-container { position: relative; }
-        .nav-highlight {
-            position: absolute;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .nav-item {
-            display: block;
-            padding: 15px 20px;
-            margin-bottom: 8px;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: color 0.3s;
-            font-weight: 500;
-            font-size: 16px;
-            cursor: pointer;
-            position: relative;
-            z-index: 1;
-        }
-        .nav-item:hover { color: #fff; }
-        .nav-item.active { color: #fff; font-weight: 600; }
-        .content { flex: 1; padding: 60px 80px; overflow: hidden; position: relative; }
-        .content h1 {
-            font-size: 56px;
-            margin-bottom: 30px;
-            color: #fff;
-            font-weight: 900;
-            padding-bottom: 30px;
-            border-bottom: 2px solid rgba(255,255,255,0.2);
-        }
-        .content h2 {
-            font-size: 36px;
-            margin-top: 60px;
-            margin-bottom: 25px;
-            color: #fff;
-            font-weight: 700;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-        }
-        .content h3 {
-            font-size: 24px;
-            margin-top: 35px;
-            margin-bottom: 15px;
-            color: rgba(255,255,255,0.9);
-            font-weight: 600;
-            display: inline-block;
-        }
-        .content p {
-            line-height: 1.8;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-        .func-header {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 35px;
-            margin-bottom: 15px;
-        }
-        .func-header h3 { margin: 0; }
-        h3p {
-            display: inline-block;
-            padding: 6px 14px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.8);
-            font-family: 'Courier New', monospace;
-            vertical-align: middle;
-            position: relative;
-            cursor: help;
-            transition: all 0.2s ease;
-        }
-        h3p:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(255,255,255,0.4);
-        }
-        .tooltip {
-            position: fixed;
-            background: rgba(20,20,30,0.98);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 10px;
-            padding: 14px 18px;
-            max-width: 320px;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 0.25s ease, transform 0.25s ease;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-        }
-        .tooltip.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .tooltip-title {
-            font-weight: 700;
-            font-size: 14px;
-            color: #fff;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .tooltip-title::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(135deg, #FF94CE, #7496FC);
-            border-radius: 50%;
-        }
-        .tooltip-desc {
-            font-size: 13px;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
-        .tooltip-funcs {
-            font-size: 12px;
-            color: rgba(255,255,255,0.5);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 10px;
-        }
-        .tooltip-funcs span {
-            color: #C586C0;
-            font-family: 'Courier New', monospace;
-        }
-        .code-block, .code-blockx {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            padding: 25px;
-            margin: 25px 0;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre;
-        }
-        .code-block { color: rgba(255,255,255,0.9); }
-        .sections-wrapper {
-            display: flex;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .section {
-            min-width: 100%;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .section.active { opacity: 1; }
-        .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 40px 0; }
-        @media (max-width: 768px) {
-            header { padding: 20px 30px; flex-wrap: wrap; }
-            .logo-text { font-size: 24px; letter-spacing: 2px; }
-            .header-buttons { width: 100%; justify-content: center; margin-top: 10px; }
-            .header-btn { padding: 8px 14px; font-size: 13px; }
-            .header-btn span { display: none; }
-            .container { flex-direction: column; }
-            .sidebar { width: 100%; min-height: auto; padding: 20px 30px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); }
-            .nav-item { padding: 12px 15px; font-size: 14px; }
-            .content { padding: 30px; }
-            .content h1 { font-size: 36px; margin-bottom: 20px; padding-bottom: 20px; }
-            .content h2 { font-size: 28px; margin-top: 40px; }
-            .content h3 { font-size: 20px; }
-            .func-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEX Documentation</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(#ffffff08 1px, transparent 1px) 0 0 / 40px 40px,
+            linear-gradient(90deg, #ffffff08 1px, transparent 1px) 0 0 / 40px 40px,
+            linear-gradient(90deg, #FF94CE40, #C579E540, #7496FC40), #000;
+        background-attachment: fixed;
+        min-height: 100vh;
+        color: #fff;
+    }
+    header {
+        padding: 30px 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .header-buttons { display: flex; gap: 12px; }
+    .header-btn {
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 18px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 10px;
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        font-size: 14px; font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .header-btn:hover {
+        background: rgba(255,255,255,0.15);
+        border-color: rgba(255,255,255,0.3);
+        color: #fff; transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .header-btn svg { transition: transform 0.3s ease; }
+    .header-btn:hover svg { transform: scale(1.1); }
+    .logo-text { font-size: 32px; font-weight: 900; letter-spacing: 3px; color: #fff; }
+    .container { display: flex; max-width: 1600px; margin: 0 auto; }
+    .sidebar {
+        width: 300px; padding: 40px 30px;
+        border-right: 1px solid rgba(255,255,255,0.15);
+        min-height: calc(100vh - 121px); position: relative;
+    }
+    .sidebar h3 {
+        font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
+        color: rgba(255,255,255,0.5); margin-bottom: 20px; font-weight: 600;
+    }
+    .nav-container { position: relative; }
+    .nav-highlight {
+        position: absolute;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none; z-index: 0;
+    }
+    .nav-item {
+        display: block; padding: 15px 20px; margin-bottom: 8px;
+        color: rgba(255,255,255,0.7); text-decoration: none;
+        border-radius: 8px; transition: color 0.3s;
+        font-weight: 500; font-size: 16px; cursor: pointer;
+        position: relative; z-index: 1;
+    }
+    .nav-item:hover { color: #fff; }
+    .nav-item.active { color: #fff; font-weight: 600; }
+    .content { flex: 1; padding: 60px 80px; overflow: hidden; position: relative; }
+    .content h1 {
+        font-size: 56px; margin-bottom: 30px; color: #fff; font-weight: 900;
+        padding-bottom: 30px; border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+    .content h2 {
+        font-size: 36px; margin-top: 60px; margin-bottom: 25px; color: #fff; font-weight: 700;
+        padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .content h3 {
+        font-size: 24px; margin-top: 35px; margin-bottom: 15px;
+        color: rgba(255,255,255,0.9); font-weight: 600; display: inline-block;
+    }
+    .content p {
+        line-height: 1.8; color: rgba(255,255,255,0.7); margin-bottom: 20px; font-size: 16px;
+    }
+    .func-header {
+        display: flex; align-items: center; flex-wrap: wrap;
+        gap: 12px; margin-top: 35px; margin-bottom: 15px;
+    }
+    .func-header h3 { margin: 0; }
+    h3p {
+        display: inline-block; padding: 6px 14px;
+        background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 6px; font-size: 13px; font-weight: 600;
+        color: rgba(255,255,255,0.8); font-family: 'Courier New', monospace;
+        vertical-align: middle; position: relative; cursor: help;
+        transition: all 0.2s ease;
+    }
+    h3p:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); }
+    .tooltip {
+        position: fixed; background: rgba(20,20,30,0.98);
+        border: 1px solid rgba(255,255,255,0.3); border-radius: 10px;
+        padding: 14px 18px; max-width: 320px; z-index: 9999;
+        pointer-events: none; opacity: 0; transform: translateY(8px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+    }
+    .tooltip.visible { opacity: 1; transform: translateY(0); }
+    .tooltip-title {
+        font-weight: 700; font-size: 14px; color: #fff; margin-bottom: 8px;
+        display: flex; align-items: center; gap: 8px;
+    }
+    .tooltip-title::before {
+        content: ''; width: 8px; height: 8px;
+        background: linear-gradient(135deg, #FF94CE, #7496FC); border-radius: 50%;
+    }
+    .tooltip-desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.5; margin-bottom: 10px; }
+    .tooltip-funcs {
+        font-size: 12px; color: rgba(255,255,255,0.5);
+        border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;
+    }
+    .tooltip-funcs span { color: #C586C0; font-family: 'Courier New', monospace; }
+    .code-block, .code-blockx {
+        background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 12px; padding: 25px; margin: 25px 0; overflow-x: auto;
+        font-family: 'Courier New', monospace; font-size: 14px; line-height: 1.6; white-space: pre;
+    }
+    .code-block { color: rgba(255,255,255,0.9); }
+    .sections-wrapper { display: flex; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .section { min-width: 100%; opacity: 0; transition: opacity 0.3s ease; }
+    .section.active { opacity: 1; }
+    .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 40px 0; }
+    .byte-table, .bin-table {
+        width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px;
+    }
+    .byte-table th, .bin-table th {
+        background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+        padding: 10px 14px; text-align: left; color: rgba(255,255,255,0.9); font-weight: 600;
+    }
+    .byte-table td, .bin-table td {
+        border: 1px solid rgba(255,255,255,0.1); padding: 10px 14px;
+        color: rgba(255,255,255,0.7); vertical-align: top;
+    }
+    .byte-table tr:hover td, .bin-table tr:hover td { background: rgba(255,255,255,0.04); }
+    .mono { font-family: 'Courier New', monospace; color: #C586C0; font-size: 13px; }
+    .chunk-tag {
+        display: inline-block; padding: 3px 10px;
+        background: rgba(116,150,252,0.2); border: 1px solid rgba(116,150,252,0.4);
+        border-radius: 5px; font-family: 'Courier New', monospace; font-size: 13px;
+        color: #7496FC; font-weight: 700; margin-right: 6px;
+    }
+    .info-box {
+        background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+        border-left: 4px solid #7496FC; border-radius: 0 10px 10px 0;
+        padding: 18px 22px; margin: 20px 0; color: rgba(255,255,255,0.75);
+        font-size: 15px; line-height: 1.7;
+    }
+    .warn-box {
+        background: rgba(255,148,0,0.07); border: 1px solid rgba(255,148,0,0.2);
+        border-left: 4px solid #FFA040; border-radius: 0 10px 10px 0;
+        padding: 18px 22px; margin: 20px 0; color: rgba(255,255,255,0.75);
+        font-size: 15px; line-height: 1.7;
+    }
+    @media (max-width: 768px) {
+        header { padding: 20px 30px; flex-wrap: wrap; }
+        .logo-text { font-size: 24px; letter-spacing: 2px; }
+        .header-buttons { width: 100%; justify-content: center; margin-top: 10px; }
+        .header-btn { padding: 8px 14px; font-size: 13px; }
+        .header-btn span { display: none; }
+        .container { flex-direction: column; }
+        .sidebar { width: 100%; min-height: auto; padding: 20px 30px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); }
+        .nav-item { padding: 12px 15px; font-size: 14px; }
+        .content { padding: 30px; }
+        .content h1 { font-size: 36px; margin-bottom: 20px; padding-bottom: 20px; }
+        .content h2 { font-size: 28px; margin-top: 40px; }
+        .content h3 { font-size: 20px; }
+        .func-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .byte-table { font-size: 12px; }
+    }
+</style>
 </head>
 <body>
-    <header>
-        <div class="logo-text">NEX Documentation</div>
-        <div class="header-buttons">
-            <a href="https://discord.gg/dPtGzckm2p" target="_blank" class="header-btn" title="Join Discord">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-                </svg>
-                <span>Discord</span>
-            </a>
-            <a href="https://github.com/NEXEmulator" target="_blank" class="header-btn" title="View GitHub">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                <span>GitHub</span>
-            </a>
+<header>
+    <div class="logo-text">NEX Documentation</div>
+    <div class="header-buttons">
+        <a href="https://discord.gg/dPtGzckm2p" target="_blank" class="header-btn" title="Join Discord">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+            <span>Discord</span>
+        </a>
+        <a href="https://github.com/NEXEmulator" target="_blank" class="header-btn" title="View GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            <span>GitHub</span>
+        </a>
+    </div>
+</header>
+<div class="container">
+    <aside class="sidebar">
+        <h3>Documentation</h3>
+        <div class="nav-container">
+            <div class="nav-highlight"></div>
+            <a href="#" class="nav-item active" data-tab="0">Functions</a>
+            <a href="#" class="nav-item" data-tab="1">Compiling</a>
+            <a href="#" class="nav-item" data-tab="2">Settings</a>
+            <a href="#" class="nav-item" data-tab="3">Roblox Binary</a>
         </div>
-    </header>
-    <div class="container">
-        <aside class="sidebar">
-            <h3>Documentation</h3>
-            <div class="nav-container">
-                <div class="nav-highlight"></div>
-                <a class="nav-item active" data-tab="0">Functions</a>
-                <a class="nav-item" data-tab="1">Compiling</a>
-                <a class="nav-item" data-tab="2">Settings</a>
-            </div>
-        </aside>
-        <main class="content">
-            <div class="sections-wrapper">
-                <div class="section active">
-                    <h1>Functions</h1>
-                    <div class="func-header"><h3>LoadLocalAsset(filepath:string):Instance</h3><h3p>FilesEnabled</h3p></div>
-                    <p>Loads a Roblox model file (.rbxm, .rbxmx) from the local environment specified by the `filepath` and returns the loaded instance object.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">local FilePath="Tool.rbxm"
-local FileData=-- [[ large string of data ]]
+    </aside>
+    <main class="content">
+        <div class="sections-wrapper">
+
+            <!-- ===== TAB 0: FUNCTIONS ===== -->
+            <div class="section active">
+                <h1>Functions</h1>
+
+                <!-- ---- Global (genv) ---- -->
+                <h2>Global Functions</h2>
+                <p>These are injected into the exploit global environment (<span class="mono">genv</span>) and are accessible from any script, including raw executor scripts running outside emulated Roblox scripts.</p>
+
+                <div class="func-header"><h3>LoadLocalAsset(filepath:string):Instance</h3><h3p>FilesEnabled</h3p></div>
+                <p>Loads a Roblox model file (<code>.rbxm</code> or <code>.rbxmx</code>) from the game's storage directory specified by <code>filepath</code> and returns the loaded instance. The path is automatically prefixed with the storage directory.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">local FilePath = "Tool.rbxm"
+local FileData = -- [[ large string of binary/xml data ]]
 repeat task.wait() until NEX_Loaded
 if not Settings.FilesEnabled then
     warn("Please turn on FilesEnabled in settings!")
 end
-
 writefile(FilePath, FileData)
 repeat task.wait() until isfile(FilePath)
 local Object = LoadLocalAsset(FilePath)
-Object.Parent = game.Players.LocalPlayer.Backpack 
+Object.Parent = game.Players.LocalPlayer.Backpack
 print("Loaded and parented:", Object.Name)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>getcustomasset(filepath:string):string</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Uploads a local file (e.g., an image, audio) specified by `filepath` to a temporary content system and returns the resulting rbxassetid:// string URL.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">local ImagePath="flower.png"
-repeat task.wait() until NEX_Loaded
+                <h3>GetLocalObjects(filepath:string):table</h3>
+                <p>Reads a local Roblox XML or binary file from storage and deserializes it via <code>SerializationService:DeserializeInstancesAsync</code>. Automatically applies <code>FixStudioXML</code> to patch Studio-exported files (replaces <code>Workspace</code> with <code>Model</code> and <code>Terrain</code> with <code>Folder</code>). Returns a table of root-level instances.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+-- Works with both .rbxmx (XML) and .rbxm (binary) files
+local instances = GetLocalObjects("MyModel.rbxmx")
+for _, inst in ipairs(instances) do
+    inst.Parent = workspace
+end</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-local rbxasset = getcustomasset(ImagePath)
-print("Asset ID:", rbxasset)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>GetObjects(assetUrl:string):table</h3>
+                <p>Fetches a Roblox asset from the asset delivery CDN using its numeric ID, deserializes it, and returns a table of instances. The <code>assetUrl</code> string must contain a numeric asset ID.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local instances = GetObjects("rbxassetid://12345678")
+for _, inst in ipairs(instances) do
+    inst.Parent = workspace
+    print("Inserted:", inst.Name)
+end</div>
+                <p>Accuracy: NEX Approved</p>
+                <div class="divider"></div>
 
-                    <h3>InsertAsset(AssetId:string):Instance</h3>
-                    <p>Loads an asset directly from the Roblox website using its `AssetId` and returns the loaded instance object.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">local AssetId="123456789"
-repeat task.wait() until NEX_Loaded
-
-local Object = InsertAsset("rbxassetid://" .. AssetId)
+                <h3>InsertAsset(assetId:string):Instance</h3>
+                <p>Loads an asset directly from Roblox using its asset ID or rbxassetid URL via <code>InsertService:LoadLocalAsset</code> and returns the loaded instance.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local Object = InsertAsset("rbxassetid://123456789")
 if Object then
     Object.Parent = game.Workspace
-    print("Inserted asset:", Object.Name)
+    print("Inserted:", Object.Name)
 end</div>
-                    <p>Accuracy: NEX Approved</p>
-                    <div class="divider"></div>
+                <p>Accuracy: NEX Approved</p>
+                <div class="divider"></div>
 
-                    <h3>ToastNotify(options:table):null</h3>
-                    <p>Sends a native desktop-style toast notification with the specified properties provided in the `options` table.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
+                <h3>GetProperties(instance:Instance):table</h3>
+                <p>Returns a dictionary of all readable properties for the given instance using <code>ReflectionService:GetPropertiesOfClass</code>. Keys are property names, values are current property values.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local props = GetProperties(workspace.BasePlate)
+for name, value in pairs(props) do
+    print(name, "=", tostring(value))
+end</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <h3>getfilename(path:string, removedot:boolean?):string</h3>
+                <p>Extracts the filename from a full path string. If <code>removedot</code> is <code>true</code>, strips the file extension.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print(getfilename("Folder/Sub/MyScript.lua"))      -- "MyScript.lua"
+print(getfilename("Folder/MyScript.lua", true))    -- "MyScript"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <h3>ToastNotify(options:table):null</h3>
+                <p>Sends a native toast notification via <code>GuiService:SendNotification</code>. Accepts <code>Title</code>, <code>Text</code>, and <code>Icon</code> fields. If <code>Icon</code> is a URL containing <code>://</code> (such as a full <code>rbxassetid://</code> URI), it is automatically stripped to <code>nil</code> — use a raw numeric ID string instead.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
 ToastNotify({
-    Title="NEX Emulator",
-    Text="The script successfully executed.",
-    Icon="rbxassetid://1347201659"
+    Title = "NEX Emulator",
+    Text  = "Script executed successfully.",
+    Icon  = "1347201659"  -- raw ID only, NOT rbxassetid://
 })</div>
-                    <p>Accuracy: Unaccurate (There are more properties that we don't know of.)</p>
-                    <div class="divider"></div>
+                <p>Accuracy: Inaccurate (There are more properties that we don't know of.)</p>
+                <div class="divider"></div>
 
-                    <h3>DisconnectFromServer(null):null</h3>
-                    <p>Immediately disconnects the client from the current Roblox server.</p>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>DisconnectFromServer(null):null</h3>
+                <p>Immediately disconnects the client by kicking the local player, waiting for the <code>ClientReplicator</code> to be destroyed, then rebuilds the character locally (removing BasePart and Accessory children that were network-replicated) so the game remains usable offline. Also disables the <code>Dead</code> humanoid state to prevent ragdoll.</p>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>GetCurrentThread(null):thread</h3>
-                    <p>Returns the native Luau thread object for the environment in which the function is called.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local CurrentThread = GetCurrentThread()
-print("Current Thread:", typeof(CurrentThread))</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>GetCurrentThread(null):thread</h3>
+                <p>Returns the native Luau thread object for the calling environment by scanning the Lua registry for a thread whose first function matches the caller.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local t = GetCurrentThread()
+print(typeof(t)) -- "thread"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>getrenv(null):table</h3>
-                    <p>Returns the Roblox Environment (renv), which is the global table used by core Roblox scripts.</p>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <div class="func-header"><h3>Rrequire(ModuleScript:ModuleScript):any</h3><h3p>RobloxScriptRequire</h3p></div>
+                <p>Exposes the native Roblox environment <code>require</code> function directly, allowing emulated scripts to load RobloxScript modules from protected locations like <code>CorePackages</code>.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local SpecialModule = game.CorePackages.Packages.HttpRequest
+local RequiredModule = Rrequire(SpecialModule)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>clonefunction(func:function):function</h3>
-                    <p>Returns a cloned, exact copy of the inputted Luau `func`. The cloned function is not affected by later calls to `hookfunction` on the original.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local original_func = print
-local cloned_print = clonefunction(original_func)
+                <!-- ---- Emulated env (renv) ---- -->
+                <h2>roblox Namespace</h2>
+                <p>Available to emulated scripts via the <span class="mono">roblox</span> global.</p>
 
-hookfunction(print, function() warn("Hooked!") end)
+                <h3>roblox.GetAssetSource(assetId:string):string</h3>
+                <p>Fetches the raw source data of a Roblox asset from the delivery CDN. The returned data may be in XML or binary format.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local source = roblox.GetAssetSource("12345678")
+print(roblox.BinaryFormat.XMLType(source)) -- "xml" or "binary"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-cloned_print("This is not hooked.")
-print("This IS hooked.")</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <div class="func-header"><h3>roblox.DownloadAsset(assetId:string, filename:string):null</h3><h3p>FilesEnabled</h3p></div>
+                <p>Downloads the raw source of a Roblox asset and saves it to the game storage directory under <code>filename</code>.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+roblox.DownloadAsset("12345678", "MyModel.rbxm")
+repeat task.wait() until isfile("MyModel.rbxm")
+print("Downloaded.")</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>GetRegisteredInstances(null):table</h3>
-                    <p>Returns a table containing a reference to most instances that exist within Luau's internal state.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local all_instances = GetRegisteredInstances()
-local part_count = 0
+                <h3>roblox.BinaryFormat.XMLType(data:string):string</h3>
+                <p>Detects the format of a Roblox data string. Returns <code>"binary"</code> if the string starts with <span class="mono">&lt;roblox!</span>, <code>"xml"</code> if it starts with <span class="mono">&lt;roblox</span>, or <code>"unknown"</code> otherwise.</p>
+                <div class="code-blockx">local fmt = roblox.BinaryFormat.XMLType(data)
+-- "binary", "xml", or "unknown"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-for _, instance in pairs(all_instances) do
-    if instance:IsA("Part") then
-        part_count = part_count + 1
-    end
-end
+                <h3>roblox.BinaryFormat.FixStudioXML(xml:string):string</h3>
+                <p>Patches Studio-exported XML for use in live games. Replaces <code>Workspace</code> item class with <code>Model</code> and <code>Terrain</code> with <code>Folder</code>, since those classes cannot be deserialized outside their native context.</p>
+                <div class="code-blockx">local fixed = roblox.BinaryFormat.FixStudioXML(studioXml)
+local instances = roblox.XML.Load(fixed)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-print("Total registered instances:", #all_instances)
-print("Total parts found:", part_count)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>roblox.XML.Object(className:string, parent:Instance):Instance</h3>
+                <p>Creates a new instance of the given class by building a minimal Roblox XML document and deserializing it. Parents the result to <code>parent</code>. Requires <code>XMLEnabled</code>.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local part = roblox.XML.Object("Part", workspace)
+print(part.ClassName) -- "Part"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>rawsetmetatable(table:userdata/table, content:table):null</h3>
-                    <p>Sets the metatable for the given `table` or `userdata` without triggering metamethods like `__metatable`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local myTable = {}
-local newMetatable = {
-    __index = function(t, k)
-        return "Intercepted: " .. k
-    end
-}
+                <h3>roblox.XML.Load(xml:string):table</h3>
+                <p>Deserializes a Roblox XML string and returns a table of root instances. Requires <code>XMLEnabled</code>.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local instances = roblox.XML.Load(readfile("MyModel.rbxmx"))
+for _, inst in ipairs(instances) do inst.Parent = workspace end</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-rawsetmetatable(myTable, newMetatable)
-print("Accessing unknown key:", myTable.someKey)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>roblox.XML.XMLToTable(xml:string):table</h3>
+                <p>Parses a Roblox XML string into a Luau table tree without creating live instances. Each instance becomes a sub-table keyed as <code>Item1</code>, <code>Item2</code>, etc., with <code>ClassName</code>, <code>Referent</code>, and property fields tagged as <code>{Tag=typeName, Value=value}</code>. Shared strings are stored in a top-level <code>SharedStrings</code> field.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local t = roblox.XML.XMLToTable(xmlString)
+-- t.Item1.ClassName      → "Part"
+-- t.Item1.Name.Tag        → "string"
+-- t.Item1.Name.Value      → "Baseplate"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>rawgetmetatable(table:userdata/table):table</h3>
-                    <p>Retrieves the metatable of the given `table` or `userdata` without triggering metamethods like `__metatable`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local myObject = Instance.new("Part")
-local objectMetatable = rawgetmetatable(myObject)
-print("Metatable Retrieved:", typeof(objectMetatable))</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>roblox.XML.TableToXML(root:table):string</h3>
+                <p>Serializes a Luau table tree (as produced by <code>XMLToTable</code>) back into valid Roblox XML. Referents are remapped to sequential <code>NEX1</code>, <code>NEX2</code>, etc. IDs and <code>Ref</code>-type properties are relinked accordingly.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local t = roblox.XML.XMLToTable(xmlString)
+t.Item1.Name = {Tag="string", Value="NewName"}
+writefile("Modified.rbxmx", roblox.XML.TableToXML(t))</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>readfile(filepath:string):string</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Reads the content of the file located at `filepath` and returns it as a string.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local path = "MyData.txt"
-
-if isfile(path) then
-    local content = readfile(path)
-    print("File Content:", content)
-else
-    warn("File does not exist!")
+                <h3>roblox.XML.SplitXML(xml:string, wrap:boolean?):table</h3>
+                <p>Splits a multi-item Roblox XML document into individual per-item XML chunks. Returns a table of <code>{Class, XML}</code> entries. If <code>wrap</code> is <code>true</code>, each chunk is wrapped in a full <code>&lt;roblox&gt;…&lt;/roblox&gt;</code> document with needed SharedStrings included.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local chunks = roblox.XML.SplitXML(bigXml, true)
+for _, chunk in ipairs(chunks) do
+    print(chunk.Class, #chunk.XML)
 end</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>writefile(filepath:string, content:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Writes the specified `content` string to the file located at `filepath`. If the file does not exist, it is created.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local path = "MyLog.txt"
-local data = "This data will overwrite the file."
+                <!-- ---- requests ---- -->
+                <h2>requests Namespace</h2>
+                <p>A Python-requests-style HTTP library. All methods take a URL string and an options table (same fields as <code>request</code>).</p>
+                <div class="info-box">
+                    <strong>Response object fields:</strong><br>
+                    <span class="mono">ok</span> — boolean success<br>
+                    <span class="mono">status_code</span> — HTTP status code<br>
+                    <span class="mono">text</span> — raw body string<br>
+                    <span class="mono">content</span> — body as hex-escaped UTF-8 byte string<br>
+                    <span class="mono">headers</span> — response headers table<br>
+                    <span class="mono">url</span> — the request URL<br>
+                    <span class="mono">elapsed</span> — timing from x-timer header<br>
+                    <span class="mono">json()</span> — decodes body as JSON and returns table<br>
+                    <span class="mono">raise_for_status()</span> — throws if <code>ok</code> is false
+                </div>
 
-writefile(path, data)
-print("Content written to", path)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <div class="func-header"><h3>requests.get(url:string, options:table):table</h3><h3p>HTTPEnabled</h3p></div>
+                <div class="func-header"><h3>requests.post(url:string, options:table):table</h3><h3p>HTTPEnabled</h3p></div>
+                <div class="func-header"><h3>requests.put(url:string, options:table):table</h3><h3p>HTTPEnabled</h3p></div>
+                <div class="func-header"><h3>requests.patch(url:string, options:table):table</h3><h3p>HTTPEnabled</h3p></div>
+                <div class="func-header"><h3>requests.delete(url:string, options:table):table</h3><h3p>HTTPEnabled</h3p></div>
+                <div class="func-header"><h3>requests.options(url:string, options:table):table</h3><h3p>HTTPEnabled</h3p></div>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local res = requests.get("https://api.example.com/data", {
+    Headers = {["Authorization"] = "Bearer mytoken"}
+})
+res:raise_for_status()
+local data = res:json()
+print("Name:", data.name)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>makefolder(filepath:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Creates a new folder (directory) at the specified `filepath`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local folder_path = "NEX/Scripts/AutoExecute"
-makefolder(folder_path)
-print("Folder created:", folder_path)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <!-- ---- NEXHttp ---- -->
+                <h2>NEXHttp Namespace</h2>
 
-                    <div class="func-header"><h3>deletefile(filepath:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Deletes the file located at `filepath`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local path = "TempFile.tmp"
+                <div class="func-header"><h3>NEXHttp.download(url:string, filename:string, chunksize:number?):table</h3><h3p>FilesEnabled</h3p></div>
+                <p>Downloads a file from <code>url</code> into storage using HTTP <code>Range</code> headers in chunks. Runs asynchronously in a coroutine. <code>chunksize</code> is a KB multiplier; default is 16 KB. Returns a download-state object.</p>
+                <div class="info-box">
+                    <strong>Download state:</strong><br>
+                    <span class="mono">finished</span> — true when complete<br>
+                    <span class="mono">installedsize</span> — bytes written so far<br>
+                    <span class="mono">size</span> — Content-Length string (or "0" if HEAD unsupported)<br>
+                    <span class="mono">WaitForFile(self)</span> — yields until done, returns final byte count
+                </div>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local dl = NEXHttp.download("https://example.com/file.dat", "file.dat", 64)
+print("Size:", dl.size)
+dl:WaitForFile()
+print("Done! Bytes:", dl.installedsize)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-if isfile(path) then
-    deletefile(path)
-    print("File deleted:", path)
+                <div class="func-header"><h3>NEXHttp.streamget(url:string, chunksize:number?):table</h3><h3p>HTTPEnabled</h3p></div>
+                <p>Streams the response body of a GET request in chunks without writing to disk. Accumulates into a <code>body</code> field on the returned state object.</p>
+                <div class="info-box">
+                    <strong>Stream state:</strong><br>
+                    <span class="mono">finished</span> — true when complete<br>
+                    <span class="mono">body</span> — accumulated response so far<br>
+                    <span class="mono">installedsize</span> — bytes received<br>
+                    <span class="mono">size</span> — Content-Length if available<br>
+                    <span class="mono">WaitForFile(self)</span> — yields until finished, returns full body
+                </div>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local stream = NEXHttp.streamget("https://example.com/large.html")
+local body = stream:WaitForFile()
+print("Got", #body, "bytes")</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <!-- ---- git ---- -->
+                <h2>git Namespace</h2>
+
+                <h3>git.getgit(url:string):table, string</h3>
+                <p>Queries the GitHub API for the contents of a repository or folder at the given GitHub URL. Automatically converts <code>github.com</code> URLs to the appropriate <code>api.github.com</code> endpoint. Returns a contents table (keys are filenames, values have <code>path</code>, <code>url</code>, <code>rawurl</code>, <code>type</code>, <code>self</code>) and the repository name.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local contents, repoName = git.getgit("https://github.com/User/Repo")
+for name, info in pairs(contents) do
+    print(name, info.type, info.rawurl)
 end</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>deletefolder(filepath:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Deletes the folder (directory) located at `filepath`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local folder_path = "TempFolder"
+                <div class="func-header"><h3>git.clone(url:string):null</h3><h3p>FilesEnabled</h3p></div>
+                <p>Clones an entire GitHub repository into the game storage directory, preserving folder structure. Subdirectories are recursively fetched via the GitHub API and files are downloaded with <code>NEXHttp.download</code>.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+git.clone("https://github.com/User/Repo")
+-- Files now in: Repo/</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-if isfolder(folder_path) then
-    deletefolder(folder_path)
-    print("Folder deleted:", folder_path)
+                <!-- ---- crypt ---- -->
+                <h2>crypt Namespace</h2>
+
+                <h3>crypt.utf8.encode(data:string):string</h3>
+                <p>Encodes a string to a hex-escaped byte string where each byte is represented as <code>\xHH</code>. Useful for safely encoding binary data as printable ASCII.</p>
+                <h3>crypt.utf8.decode(data:string):string</h3>
+                <p>Decodes a hex-escaped <code>\xHH</code> string back to its original binary form.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local enc = crypt.utf8.encode("Hello\0World")
+print(enc)                         -- "\x48\x65\x6C\x6C\x6F\x00\x57..."
+print(crypt.utf8.decode(enc))      -- "Hello\0World"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <h3>crypt.base64.encode(data:string):string</h3>
+                <p>Encodes a string using Base64.</p>
+                <h3>crypt.base64.decode(data:string):string</h3>
+                <p>Decodes a Base64 string back to its original form.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local b64 = crypt.base64.encode("Hello, NEX!")
+print(b64)                          -- "SGVsbG8sIE5FWCE="
+print(crypt.base64.decode(b64))     -- "Hello, NEX!"</div>
+                <p>Accuracy: NEX Approved (via crypt.base64)</p>
+                <div class="divider"></div>
+
+                <!-- ---- File Functions ---- -->
+                <h2>File Functions</h2>
+                <p>All sandboxed file functions operate within the game's isolated storage directory (<span class="mono">GameData/&lt;rootPlaceId&gt;/Storage/</span>). Paths are automatically prefixed — you cannot escape this directory. The <code>ExternalFileFunctions</code> table (requires <code>ExternalFilePerms</code>) provides the raw unsandboxed originals.</p>
+
+                <div class="func-header"><h3>OpenFile(path:string?):File</h3><h3p>FilesEnabled</h3p></div>
+                <p>Creates or opens a file or folder at the given path within storage and returns a <code>File</code> userdata object. If <code>path</code> is <code>nil</code>, creates an "unnamed" file (or "unnamed (N)" to avoid collisions). The returned object has a locked metatable and uses a <code>buffer</code> as its underlying userdata.</p>
+                <div class="info-box">
+                    <strong>File object API:</strong><br>
+                    <span class="mono">Path</span> — current path (assigning renames/moves the file)<br>
+                    <span class="mono">Name</span> — filename only (assigning renames in-place)<br>
+                    <span class="mono">Type</span> — <code>"file"</code> or <code>"folder"</code> (assigning converts the entry)<br>
+                    <span class="mono">Read(self):string</span> — returns full file content<br>
+                    <span class="mono">Write(self, content:string)</span> — overwrites file content<br>
+                    <span class="mono">ReadLine(self, line:number):string</span> — returns a specific line (1-indexed)<br>
+                    <span class="mono">ReplaceLine(self, line:number, content:string)</span> — replaces a specific line<br>
+                    <span class="mono">GetChildren(self):table</span> — lists direct children (folders only)<br>
+                    <span class="mono">GetDescendants(self):table</span> — lists all descendants recursively (folders only)<br>
+                    <span class="mono">Destroy(self)</span> — deletes the file or folder
+                </div>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local f = OpenFile("config.txt")
+f:Write("version=1\nenabled=true")
+print(f:ReadLine(2))      -- "enabled=true"
+f:ReplaceLine(1, "version=2")
+print(f:Read())           -- "version=2\nenabled=true"
+f:Destroy()</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <div class="func-header"><h3>readline(path:string, line:number):string</h3><h3p>FilesEnabled</h3p></div>
+                <p>Reads a specific 1-indexed line from a file in storage.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local line2 = readline("config.txt", 2)
+print("Line 2:", line2)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <div class="func-header"><h3>writeline(path:string, line:number, content:string):null</h3><h3p>FilesEnabled</h3p></div>
+                <p>Writes <code>content</code> to a specific 1-indexed line in a file in storage. If the line doesn't exist, the file is extended with empty lines as needed.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+writeline("config.txt", 3, "newkey=hello")
+print(readline("config.txt", 3))  -- "newkey=hello"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <div class="func-header"><h3>typefile(path:string):string</h3><h3p>FilesEnabled</h3p></div>
+                <p>Returns <code>"file"</code> or <code>"folder"</code> depending on what exists at <code>path</code>. Throws an error if the path doesn't exist.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print(typefile("config.txt"))  -- "file"
+print(typefile("Scripts"))     -- "folder"</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <div class="func-header"><h3>getcustomasset(filepath:string):string</h3><h3p>FilesEnabled</h3p></div>
+                <p>Uploads a file from storage to Roblox's temporary content system and returns its <code>rbxasset://</code> URL. Suitable for use as texture or audio source properties.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local url = getcustomasset("flower.png")
+workspace.Part.Decal.Texture = url</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <div class="func-header"><h3>readfile(filepath:string):string</h3><h3p>FilesEnabled</h3p></div>
+                <p>Reads and returns the content of a file in storage as a string.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+if isfile("MyData.txt") then
+    print(readfile("MyData.txt"))
 end</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>isfile(filepath:string):boolean</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Returns `true` if a file exists at the specified `filepath`, otherwise returns `false`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local path = "Config.json"
+                <div class="func-header"><h3>writefile(filepath:string, content:string):null</h3><h3p>FilesEnabled</h3p></div>
+                <p>Writes a string to a file in storage, creating it if it does not exist.</p>
+                <div class="func-header"><h3>makefolder(filepath:string):null</h3><h3p>FilesEnabled</h3p></div>
+                <p>Creates a new folder at the given path in storage.</p>
+                <div class="func-header"><h3>deletefile(filepath:string):null</h3><h3p>FilesEnabled</h3p></div>
+                <p>Deletes a file from storage.</p>
+                <div class="func-header"><h3>deletefolder(filepath:string):null</h3><h3p>FilesEnabled</h3p></div>
+                <p>Deletes a folder and its contents from storage.</p>
+                <div class="func-header"><h3>isfile(filepath:string):boolean</h3><h3p>FilesEnabled</h3p></div>
+                <p>Returns <code>true</code> if a file exists at the path in storage.</p>
+                <div class="func-header"><h3>isfolder(filepath:string):boolean</h3><h3p>FilesEnabled</h3p></div>
+                <p>Returns <code>true</code> if a folder exists at the path in storage.</p>
+                <div class="func-header"><h3>appendfile(filepath:string, content:string):null</h3><h3p>FilesEnabled</h3p></div>
+                <p>Appends <code>content</code> to the end of a file in storage.</p>
+                <div class="func-header"><h3>listfiles(filepath:string):table</h3><h3p>FilesEnabled</h3p></div>
+                <p>Returns a table of file/folder names in the given directory within storage. Pass <code>nil</code> or <code>"./"</code> to list the root of storage.</p>
+                <div class="func-header"><h3>loadfile(filepath:string):function</h3><h3p>FilesEnabled</h3p></div>
+                <p>Loads and returns a Luau script from storage as a callable function.</p>
+                <div class="divider"></div>
 
-if isfile(path) then
-    print("Config file exists!")
-end</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>ExternalFileFunctions</h3>
+                <p>A table populated only when <code>ExternalFilePerms</code> is enabled. Contains the raw, unsandboxed exploit file functions (<code>readfile</code>, <code>writefile</code>, <code>getcustomasset</code>, etc.) that operate on the full filesystem rather than the game storage directory.</p>
+                <div class="warn-box">
+                    <strong>Warning:</strong> Functions inside <code>ExternalFileFunctions</code> can read/write anywhere the executor can access. Enable <code>ExternalFilePerms</code> in Settings to populate this table.
+                </div>
+                <div class="code-blockx">-- Only available when ExternalFilePerms = true
+local raw = ExternalFileFunctions.readfile("C:/path/to/anything.txt")</div>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>isfolder(filepath:string):boolean</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Returns `true` if a folder exists at the specified `filepath`, otherwise returns `false`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local path = "Plugins"
+                <!-- ---- Identity ---- -->
+                <h2>Identity &amp; Thread</h2>
 
-if isfolder(path) then
-    print("Plugins folder exists!")
-end</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <div class="func-header"><h3>setidentity(level:number):null</h3><h3p>CapabilityMax</h3p></div>
+                <p>Changes the execution identity (privilege level) of the current thread. The <code>level</code> cannot exceed the <code>CapabilityMax</code> setting value. If it does, a warning is issued and nothing happens.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local id = getthreadidentity()
+setidentity(3)
+print(getthreadidentity())  -- 3
+setidentity(id)             -- restore</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>appendfile(filepath:string, content:string):null</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Appends the specified `content` string to the end of the file located at `filepath`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local path = "GameLog.txt"
-local new_entry = "\n[INFO] Player joined at " .. os.date()
+                <h3>getthreadidentity(null):number</h3>
+                <p>Returns the current execution identity (privilege level) of the calling thread.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print("Identity:", getthreadidentity())</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-appendfile(path, new_entry)
-print("Entry appended to log.")</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <!-- ---- HTTP ---- -->
+                <h2>HTTP</h2>
 
-                    <div class="func-header"><h3>listfiles(filepath:string):table</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Returns a table containing a list of all files and folders within the directory specified by `filepath`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local path = "Scripts"
-
-local files = listfiles(path)
-print("Files in 'Scripts' folder:")
-
-for i, file_name in pairs(files) do
-    print(i, file_name)
-end</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
-
-                    <div class="func-header"><h3>loadfile(filepath:string):function</h3><h3p>FilesEnabled</h3p><h3p>ExternalFilePerms</h3p></div>
-                    <p>Loads a Luau script from the file located at `filepath` and returns it as a function.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local path = "MyScript.lua"
-
-if isfile(path) then
-    local loaded_script = loadfile(path)
-    if typeof(loaded_script) == "function" then
-        print("Executing loaded file...")
-        loaded_script()
-    end
-else
-    warn("Script file not found!")
-end</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
-
-                    <h3>loadstring(str:string, chunkname:string):function, nil + string</h3>
-                    <p>Loads a string of Luau code and returns it as a function. The optional `chunkname` is used for error messages.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local function_to_run = loadstring("print('Hello from loadstring!')", "MyChunk")
-if function_to_run then
-    function_to_run()
-else
-    warn("Failed to loadstring")
-end</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
-
-                    <h3>setreadonly(table:table, readonly:boolean):null</h3>
-                    <p>Sets the read-only status of a table. If `readonly` is true, the table cannot be modified.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local myTable = {a = 1, b = 2}
-setreadonly(myTable, true)
-
-myTable.a = 5 
-print(myTable.a) -- Output is still 1
-
-setreadonly(myTable, false)
-myTable.a = 10
-print(myTable.a) -- Output is 10</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
-
-                    <h3>hookfunction(original:function, hook:function):function</h3>
-                    <p>Replaces the `original` function with the `hook` function. Returns the original function.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local original_print = print
-local function hooked_print(original_func, ...)
-    warn("Print was called!")
-    return original_func(...)
-end
-
-hookfunction(print, hooked_print)
-print("This will trigger the hook.")</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
-
-                    <div class="func-header"><h3>setidentity(level:number):null</h3><h3p>CapabilityMax</h3p></div>
-                    <p>Changes the execution identity (privilege level) of the current thread to the specified `level`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local current_identity = getthreadidentity()
-print("Current Identity:", current_identity)
-
-setidentity(8)
-print("New Identity:", getthreadidentity())
-
-setidentity(current_identity)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
-
-                    <h3>getthreadidentity(null):number</h3>
-                    <p>Returns the current execution identity (privilege level) of the calling thread.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local identity_level = getthreadidentity()
-print("The current thread's identity level is:", identity_level)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
-
-                    <div class="func-header"><h3>request(options:table):table</h3><h3p>HTTPEnabled</h3p></div>
-                    <p>Performs an HTTP request using the properties specified in the `options` table. Returns a table containing the response data.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local options = {
-    Url = "https://example.com/api/data",
+                <div class="func-header"><h3>request(options:table):table</h3><h3p>HTTPEnabled</h3p></div>
+                <p>Performs an HTTP request using the options table. Returns a standard executor HTTP response with <code>StatusCode</code>, <code>Body</code>, <code>Headers</code>, <code>Success</code>, etc.</p>
+                <h3>Example Usage</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local resp = request({
+    Url    = "https://example.com/api/data",
     Method = "GET",
-    Headers = {
-        ["Content-Type"] = "application/json",
-        ["Authorization"] = "Bearer token"
-    },
-    Body = nil
-}
+    Headers = {["Content-Type"] = "application/json"}
+})
+print(resp.StatusCode, resp.Body)</div>
+                <p>Accuracy: NEX Approved</p>
+                <div class="divider"></div>
 
-local response = request(options)
+                <!-- ---- Misc ---- -->
+                <h2>Miscellaneous</h2>
 
-print("Status Code:", response.StatusCode)
-print("Body:", response.Body)</div>
-                    <p>Accuracy: NEX Approved</p>
-                    <div class="divider"></div>
+                <h3>UpdateNEX(null):null</h3>
+                <p>Re-runs NEX's environment injection pass (<code>nexify</code>) on all currently registered Luau threads. Useful if a new script spawned after the initial load and did not receive the NEX environment.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+UpdateNEX()</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>getsenv(instance:Instance):table</h3>
-                    <p>Returns the Script Environment of the given `instance` (typically a `LocalScript` or `Script`).</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local target_script = game.StarterPlayer.StarterPlayerScripts.MyScript
-local script_env = getsenv(target_script)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>getrenv(null):table</h3>
+                <p>Returns the Roblox environment table — the injected global table that emulated scripts receive.</p>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>newcclosure(func:function):function</h3>
-                    <p>Creates a new C-closure from a Luau function. C-closures are more resilient to certain forms of inspection.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local function my_luau_func(a, b)
-    return a + b
-end
+                <h3>getsenv(instance:Instance):table</h3>
+                <p>Returns the script environment of the given instance (typically a <code>LocalScript</code> or <code>Script</code>).</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local env = getsenv(game.StarterPlayer.StarterPlayerScripts.MyScript)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-local c_closure = newcclosure(my_luau_func)
-local result = c_closure(5, 7)
-print("Result of C-closure:", result)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>clonefunction(func:function):function</h3>
+                <p>Returns a cloned copy of a Luau function unaffected by later <code>hookfunction</code> calls on the original.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local cloned = clonefunction(print)
+hookfunction(print, function() warn("Hooked!") end)
+cloned("Not hooked.")   -- works normally
+print("Is hooked.")</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>newlclosure(func:function, env:table):function</h3>
-                    <p>Creates a new Luau closure from a function, optionally binding it to a custom `env` table.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local custom_env = {
-    CustomGlobal = "Hello!"
-}
+                <h3>hookfunction(original:function, hook:function):function</h3>
+                <p>Replaces <code>original</code> with <code>hook</code>. Returns the original function.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+hookfunction(print, function(...) warn("Print called!") end)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-local function my_luau_func()
-    print(CustomGlobal)
-end
+                <h3>newcclosure(func:function):function</h3>
+                <p>Wraps a Luau function in a C-closure, making it more resilient to certain forms of inspection.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local c = newcclosure(function(a, b) return a + b end)
+print(c(5, 7))  -- 12</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-local l_closure = newlclosure(my_luau_func, custom_env)
-l_closure()</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>newlclosure(func:function, env:table):function</h3>
+                <p>Creates a new Luau closure optionally bound to a custom environment table.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local l = newlclosure(function() print(CustomGlobal) end, {CustomGlobal="Hello!"})
+l()</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>ReplicateSignal(signal:RBXScriptSignal):null</h3>
-                    <p>Replicates serversided RBXScriptSignals.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local signal = game.Players.LocalPlayer.Kill
-replicatesignal(signal)</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>setreadonly(table:table, readonly:boolean):null</h3>
+                <p>Sets the read-only status of a table. If the executor lacks native <code>setreadonly</code>, NEX emulates it by locking the metatable with a blocking <code>__newindex</code>.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local t = {a=1}
+setreadonly(t, true)
+t.a = 5         -- silently fails
+print(t.a)      -- 1
+setreadonly(t, false)
+t.a = 10
+print(t.a)      -- 10</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>GetConnections(signal:RBXScriptSignal):table</h3>
-                    <p>Returns a table containing all active `RBXScriptConnection` objects connected to the specified `signal`.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local signal = game.Players.LocalPlayer.CharacterAdded
+                <h3>rawsetmetatable(target:userdata/table, mt:table):null</h3>
+                <p>Sets the metatable for a table or userdata without triggering <code>__metatable</code> guards.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+rawsetmetatable(myTable, {__index = function(t,k) return "Intercepted: "..k end})
+print(myTable.someKey)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-local conn = signal:Connect(function() end)
+                <h3>rawgetmetatable(target:userdata/table):table</h3>
+                <p>Retrieves the metatable of a table or userdata without triggering <code>__metatable</code> guards.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local mt = rawgetmetatable(Instance.new("Part"))
+print(typeof(mt))</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-local connections = GetConnections(signal)
-print("Number of connections:", #connections)
+                <h3>GetRegisteredInstances(null):table</h3>
+                <p>Returns a table containing references to most instances existing in Luau's internal registry state.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local all = GetRegisteredInstances()
+for _, inst in pairs(all) do
+    if inst:IsA("Part") then print(inst.Name) end
+end</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <h3>CloneReference(ref:userdata):userdata</h3>
+                <p>Returns a new independent reference to the given userdata. Changes to the clone's metatable do not affect the original.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local clone = CloneReference(game)
+rawsetmetatable(clone, {})
+print(rawgetmetatable(game) == rawgetmetatable(clone))  -- false</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <h3>ReplicateSignal(signal:RBXScriptSignal):null</h3>
+                <p>Replicates server-sided RBXScriptSignals to the client.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+ReplicateSignal(game.Players.LocalPlayer.Kill)</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
+
+                <h3>GetConnections(signal:RBXScriptSignal):table</h3>
+                <p>Returns a table of all active <code>RBXScriptConnection</code> objects connected to the given signal.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local conn = workspace.ChildAdded:Connect(function() end)
+local conns = GetConnections(workspace.ChildAdded)
+print("#connections:", #conns)
 conn:Disconnect()</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-                    <h3>CloneReference(reference:userdata):userdata</h3>
-                    <p>Returns a reference to the given userdata, it is not affected by any edits to the original reference.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local original_instance = game
-local cloned_instance = CloneReference(game)
+                <h3>loadstring(str:string, chunkname:string?):function</h3>
+                <p>Loads a Luau code string and returns it as a callable function. <code>chunkname</code> is used in error messages.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+local fn = loadstring("print('Hello from loadstring!')", "MyChunk")
+if fn then fn() end</div>
+                <p>Accuracy: NEX Developed</p>
+                <div class="divider"></div>
 
-rawsetmetatable(cloned_instance,{})
+                <!-- ---- Runtime vars ---- -->
+                <h2>Runtime Variables</h2>
 
-print(rawgetmetatable(game)==rawgetmetatable(cloned_instance)) --false</div>
-                    <p>Accuracy: NEX Developed</p>
-                    <div class="divider"></div>
+                <h3>NEX_Loaded:boolean</h3>
+                <p>Set to <code>true</code> in the script environment once NEX has finished injecting. Always wait for this before calling any NEX function.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print("NEX is ready!")</div>
+                <div class="divider"></div>
 
-                    <div class="func-header"><h3>Rrequire(ModuleScript:ModuleScript):any</h3><h3p>RobloxScriptRequire</h3p></div>
-                    <p>Used to require RobloxScript modules.</p>
-                    <h3>Example Usage</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-local SpecialModule=game.CorePackages.Packages.HttpRequest
-local RequiredSpecialModule=Rrequire(SpecialModule)</div>
-                    <p>Accuracy: NEX Developed</p>
-                </div>
+                <h3>Settings:table</h3>
+                <p>A snapshot of the current NEX settings (same keys as <code>Settings.json</code>), updated on each injection pass.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print(Settings.FilesEnabled)   -- true/false
+print(Settings.CapabilityMax)  -- e.g. 2
+print(Settings.XMLEnabled)     -- true/false</div>
+                <div class="divider"></div>
 
-                <div class="section">
-                    <h1>Compilation</h1>
-                    <p>Documentation for compilation coming soon.</p>
-                </div>
+                <h3>LoadedIcons:table</h3>
+                <p>A table of loaded icon asset strings keyed by name. Always includes <code>LoadedIcons.NEX</code>.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print(LoadedIcons.NEX)  -- rbxasset://... URL for the NEX icon</div>
+                <div class="divider"></div>
 
-                <div class="section">
-                    <h1>Settings</h1>
-                    <h3>Lua accessability for settings</h3>
-                    <div class="code-blockx">repeat task.wait() until NEX_Loaded
-print(Settings["Setting"])</div>
-                    <div class="divider"></div>
-                    <h3>CapabilityMax:number</h3>
-                    <p>The maximum capability for setidentity.</p>
-                    <div class="divider"></div>
-                    <h3>FilesEnabled:boolean</h3>
-                    <p>The permission to enable file functions.</p>
-                    <div class="divider"></div>
-                    <h3>EmulateOnGameIsLoaded:boolean</h3>
-                    <p>The setting which makes NEX only load when the game is loaded.</p>
-                    <div class="divider"></div>
-                    <h3>HTTPEnabled:boolean</h3>
-                    <p>The permission to enable HTTP functions.</p>
-                    <div class="divider"></div>
-                    <h3>RobloxScriptRequire:boolean</h3>
-                    <p>The permission to enable the custom function Rrequire.</p>
-                    <div class="divider"></div>
-                    <h3>ExternalFilePerms:boolean</h3>
-                    <p>The permission to enable ExternalFileFunctions.</p>
-                    <div class="divider"></div>
-                    <h3>DebugMode:boolean</h3>
-                    <p>The setting to turn on debugging.</p>
-                </div>
+                <h3>_NEXVERSION:string</h3>
+                <p>The currently running NEX version string.</p>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print(_NEXVERSION)  -- "1.0.9"</div>
+
             </div>
-        </main>
-    </div>
-    <script>
-        const nav = document.querySelectorAll('.nav-item');
-        const wrapper = document.querySelector('.sections-wrapper');
-        const sections = document.querySelectorAll('.section');
-        const highlight = document.querySelector('.nav-highlight');
-        let currentTab = 0;
 
-        function updateHighlight(el) {
-            highlight.style.top = el.offsetTop + 'px';
-            highlight.style.left = el.offsetLeft + 'px';
-            highlight.style.width = el.offsetWidth + 'px';
-            highlight.style.height = el.offsetHeight + 'px';
+            <!-- ===== TAB 1: COMPILING ===== -->
+            <div class="section">
+                    <h1>Compiling</h1>
+                    <p>NEX scans the Lua registry on startup (and again whenever <span class="mono">UpdateNEX</span> is called) and injects the NEX environment into every eligible Luau thread it finds. This scan is called <b>nexify</b>. The behaviour for a given thread is controlled by a set of special boolean flags that a script sets on its own environment before NEX runs.</p>
+                    <p>Setting these flags tells NEX how to treat the script — whether to skip it entirely, inject the standard renv, or switch it to the low-level NEXLuau API. All flags are checked during the nexify pass; they have no effect after injection has already occurred for that thread.</p>
+
+                    <h2>Environment Flags</h2>
+
+                    <div class="func-header"><h3>Protected_Environment:boolean</h3></div>
+                    <p>When set to <span class="mono">true</span> in a script's environment, NEX will <b>completely skip</b> that thread during injection. No NEX functions, no <span class="mono">NEX_Loaded</span>, nothing. The script runs as a plain Roblox Luau script with no emulator involvement.</p>
+                    <p>If <span class="mono">Settings.DebugMode</span> is on, or if <span class="mono">ForceDebuggedEnvironment</span> is also set on the same environment, NEX prints a warning: <span class="mono">"{script} IS PROTECTED"</span>.</p>
+                    <p>Use this to opt a script out of NEX entirely — useful for utility modules that must run in a clean Roblox environment and must not have their globals overwritten.</p>
+                    <h3>Example</h3>
+                    <div class="code-blockx">-- At the very top of your script, before any yields,
+-- so NEX sees the flag during the nexify pass.
+local env = getfenv()
+env.Protected_Environment = true
+
+-- NEX will never touch this thread.
+-- Standard Roblox globals only from here on.
+print(game.Name)</div>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>NEXLuau:boolean</h3></div>
+                    <p>Opts the script into <b>NEXLuau mode</b> — a low-level C-style API surface inspired by C++ standard library naming. When NEX sees this flag it redirects the script environment's <span class="mono">__index</span> metamethod to the global <span class="mono">nexenv</span> table instead of the normal Roblox environment.</p>
+                    <p>The practical effects are:</p>
+                    <p><b>1.</b> All NEX renv functions (normally injected directly into the script's environment) are instead placed into <span class="mono">nexenv.std.NEXFunctions</span>. They are still accessible because <span class="mono">nexenv.std.NEXFunctions</span> is the effective <span class="mono">__index</span> target for global lookups.</p>
+                    <p><b>2.</b> <span class="mono">NEX_Loaded</span> is set on the shared <span class="mono">nexenv</span> table rather than on the individual script environment.</p>
+                    <p><b>3.</b> The script gains access to the full <span class="mono">nexenv.std</span> namespace directly by name — for example, <span class="mono">cout(...)</span> instead of <span class="mono">print(...)</span>.</p>
+
+                    <h3>nexenv.std — The NEXLuau Standard Library</h3>
+                    <p>All names below are accessible directly as globals inside a NEXLuau script.</p>
+                    <table class="bin-table">
+                        <thead><tr><th>Name</th><th>Maps to</th><th>Description</th></tr></thead>
+                        <tbody>
+                            <tr><td class="mono">cout</td><td><span class="mono">print</span></td><td>Standard output.</td></tr>
+                            <tr><td class="mono">coutw</td><td><span class="mono">warn</span></td><td>Standard warning output.</td></tr>
+                            <tr><td class="mono">throw</td><td><span class="mono">error</span></td><td>Raises an error.</td></tr>
+                            <tr><td class="mono">dicti</td><td><span class="mono">next</span></td><td>Dictionary iterator — the raw <span class="mono">next</span> function for generic for loops.</td></tr>
+                            <tr><td class="mono">tick</td><td><span class="mono">os.clock</span></td><td>Returns the CPU time in seconds.</td></tr>
+                            <tr><td class="mono">sleep</td><td><span class="mono">task.wait</span></td><td>Yields the current thread.</td></tr>
+                            <tr><td class="mono">task</td><td><span class="mono">task</span></td><td>The Roblox task library.</td></tr>
+                            <tr><td class="mono">os</td><td><span class="mono">os</span></td><td>The Luau os library.</td></tr>
+                            <tr><td class="mono">math</td><td><span class="mono">math</span></td><td>The Luau math library.</td></tr>
+                            <tr><td class="mono">string</td><td><span class="mono">string</span></td><td>The Luau string library.</td></tr>
+                            <tr><td class="mono">table</td><td><span class="mono">table</span></td><td>The Luau table library.</td></tr>
+                            <tr><td class="mono">threads</td><td><span class="mono">coroutine</span></td><td>The Luau coroutine library.</td></tr>
+                            <tr><td class="mono">random</td><td><span class="mono">Random</span></td><td>The Roblox Random class constructor.</td></tr>
+                            <tr><td class="mono">luaL_dostring</td><td><span class="mono">loadstring</span></td><td>Compiles a string as a Luau chunk and returns it as a function.</td></tr>
+                            <tr><td class="mono">call.protected</td><td><span class="mono">pcall</span></td><td>Protected call.</td></tr>
+                            <tr><td class="mono">call.extended_protected</td><td><span class="mono">xpcall</span></td><td>Extended protected call with a message handler.</td></tr>
+                            <tr><td class="mono">convert.tonumber</td><td><span class="mono">tonumber</span></td><td>String/value to number conversion.</td></tr>
+                            <tr><td class="mono">convert.tostring</td><td><span class="mono">tostring</span></td><td>Value to string conversion.</td></tr>
+                            <tr><td class="mono">types.luatype</td><td><span class="mono">type</span></td><td>Returns the Lua type of a value.</td></tr>
+                            <tr><td class="mono">types.luautype</td><td><span class="mono">typeof</span></td><td>Returns the Roblox/Luau type of a value.</td></tr>
+                            <tr><td class="mono">functiondebug.info</td><td><span class="mono">debug.info</span></td><td>Inspects functions or call stack frames.</td></tr>
+                            <tr><td class="mono">functiondebug.getenvironment</td><td><span class="mono">getfenv</span></td><td>Returns the environment of a function.</td></tr>
+                            <tr><td class="mono">luadebug.lua_registry</td><td><span class="mono">getreg()</span></td><td>A snapshot of the Lua registry captured at emulator startup.</td></tr>
+                            <tr><td class="mono">tabledebug.__len</td><td><span class="mono">rawlen</span></td><td>Gets the raw length of a table, bypassing <span class="mono">__len</span>.</td></tr>
+                            <tr><td class="mono">tabledebug.__index</td><td><span class="mono">rawget</span></td><td>Gets a table field, bypassing <span class="mono">__index</span>.</td></tr>
+                            <tr><td class="mono">tabledebug.__newindex</td><td><span class="mono">rawset</span></td><td>Sets a table field, bypassing <span class="mono">__newindex</span>.</td></tr>
+                            <tr><td class="mono">tabledebug.__equal</td><td><span class="mono">rawequal</span></td><td>Compares two values without metamethods.</td></tr>
+                            <tr><td class="mono">tabledebug.setmetatable</td><td><span class="mono">setmetatable</span></td><td>Standard setmetatable.</td></tr>
+                            <tr><td class="mono">tabledebug.getmetatable</td><td><span class="mono">getmetatable</span></td><td>Standard getmetatable.</td></tr>
+                            <tr><td class="mono">tabledebug.__metatable.rawgetmetatable</td><td><span class="mono">getrawmetatable</span></td><td>Gets the raw metatable, bypassing <span class="mono">__metatable</span> protection.</td></tr>
+                            <tr><td class="mono">tabledebug.__metatable.rawsetmetatable</td><td><span class="mono">setrawmetatable</span></td><td>Sets the raw metatable, bypassing protection.</td></tr>
+                            <tr><td class="mono">globals.globalenvironment</td><td><span class="mono">_G</span></td><td>The Luau global environment table.</td></tr>
+                            <tr><td class="mono">globals.sharedenvironment</td><td><span class="mono">shared</span></td><td>The Roblox shared table.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>nexenv.std.RobloxObjects</h3>
+                    <p>The <span class="mono">RobloxObjects</span> sub-table exposes Roblox datatype constructors that are normally in the global scope. <span class="mono">Game</span> is wrapped in an isolated cloneref with a blank metatable so changes to it don't leak back to the real game service.</p>
+                    <table class="bin-table">
+                        <thead><tr><th>Name</th><th>Roblox type</th></tr></thead>
+                        <tbody>
+                            <tr><td class="mono">RobloxObjects.Game</td><td><span class="mono">game</span> (isolated cloneref)</td></tr>
+                            <tr><td class="mono">RobloxObjects.Instance</td><td><span class="mono">Instance</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.Color3</td><td><span class="mono">Color3</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.Enum</td><td><span class="mono">Enum</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.Vector3</td><td><span class="mono">Vector3</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.Vector2</td><td><span class="mono">Vector2</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.CFrame</td><td><span class="mono">CFrame</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.UDim2</td><td><span class="mono">UDim2</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.UDim</td><td><span class="mono">UDim</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.Font</td><td><span class="mono">Font</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.TweenInfo</td><td><span class="mono">TweenInfo</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.RaycastParams</td><td><span class="mono">RaycastParams</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.OverlapParams</td><td><span class="mono">OverlapParams</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.PhysicalProperties</td><td><span class="mono">PhysicalProperties</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.Path2DControlPoint</td><td><span class="mono">Path2DControlPoint</span></td></tr>
+                            <tr><td class="mono">RobloxObjects.RotationCurveKey</td><td><span class="mono">RotationCurveKey</span></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>nexenv top-level fields</h3>
+                    <p>In addition to <span class="mono">nexenv.std</span>, the following fields sit on <span class="mono">nexenv</span> itself and are visible as globals inside a NEXLuau script.</p>
+                    <table class="bin-table">
+                        <thead><tr><th>Name</th><th>Description</th></tr></thead>
+                        <tbody>
+                            <tr><td class="mono">task</td><td>The Roblox task library (also in std; provided at both levels for convenience).</td></tr>
+                            <tr><td class="mono">__index</td><td>The raw Instance <span class="mono">__index</span> method captured by NEX.</td></tr>
+                            <tr><td class="mono">__newindex</td><td>The raw Instance <span class="mono">__newindex</span> method captured by NEX.</td></tr>
+                            <tr><td class="mono">NEX_Loaded</td><td>Set to <span class="mono">true</span> once NEX has injected. In NEXLuau mode this lives on <span class="mono">nexenv</span> rather than on the individual script environment.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Example</h3>
+                    <div class="code-blockx">-- Tell NEX this is a NEXLuau script
+local env = getfenv()
+env.NEXLuau = true
+
+-- Wait for injection (NEX_Loaded is on nexenv, still visible as a global)
+repeat sleep(0) until NEX_Loaded
+
+-- Use the NEXLuau stdlib
+cout("Hello from NEXLuau!")                   -- print
+coutw("This is a warning")                    -- warn
+
+local ok, err = call.protected(function()
+    throw("oops")                             -- error
+end)
+coutw("Caught:", err)
+
+-- Access Roblox datatypes
+local part = RobloxObjects.Instance.new("Part")
+part.Size  = RobloxObjects.Vector3.new(4, 1, 2)
+part.Parent = RobloxObjects.Game.Workspace
+
+-- Low-level table access
+local t = {10, 20, 30}
+cout(tabledebug.__len(t))                     -- 3
+cout(tabledebug.__index(t, 2))                -- 20
+
+-- Compile and run a string at runtime
+local chunk = luaL_dostring("return 1 + 1")
+cout(chunk())                                 -- 2
+
+-- type checking
+cout(types.luatype(part))                     -- "userdata"
+cout(types.luautype(part))                    -- "Instance"</div>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>ExternalThread:boolean</h3></div>
+                    <p>Marks the thread as <b>external</b> — meaning it originated outside of the normal Roblox script context (for example, a thread spawned directly by an executor). When NEX detects this flag during nexify it performs a thread re-spawn:</p>
+                    <p><b>1.</b> The thread is cancelled with <span class="mono">task.cancel</span>.</p>
+                    <p><b>2.</b> NEX yields one frame with <span class="mono">task.wait()</span>.</p>
+                    <p><b>3.</b> The same thread coroutine is re-spawned with <span class="mono">task.spawn</span>.</p>
+                    <p>This re-spawn happens <em>after</em> the renv has already been injected into the thread's environment, so the thread resumes with full NEX globals available from the very first line. If <span class="mono">Settings.DebugMode</span> is on, NEX logs <span class="mono">"{script} is EXTERNAL"</span>.</p>
+                    <p><span class="mono">ExternalThread</span> is independent of <span class="mono">NEXLuau</span> — both flags can be set together.</p>
+                    <h3>Example</h3>
+                    <div class="code-blockx">local env = getfenv()
+env.ExternalThread = true
+
+-- After NEX re-spawns this thread, NEX_Loaded is already true.
+repeat task.wait() until NEX_Loaded
+print("Running as an external thread with NEX globals loaded.")</div>
+                    <div class="divider"></div>
+
+                    <div class="func-header"><h3>ForceDebuggedEnvironment:boolean</h3></div>
+                    <p>Forces NEX to emit debug log messages for this specific script regardless of the global <span class="mono">Settings.DebugMode</span> value. Two messages may be printed:</p>
+                    <p>— If <span class="mono">Protected_Environment</span> is also set: <span class="mono">"{script} IS PROTECTED"</span></p>
+                    <p>— After successful injection: <span class="mono">"NEX LOADED IN {script}"</span></p>
+                    <p>Use this for per-script injection diagnostics without enabling global DebugMode (which would flood the console from every script).</p>
+                    <h3>Example</h3>
+                    <div class="code-blockx">local env = getfenv()
+env.ForceDebuggedEnvironment = true
+
+-- NEX will print "NEX LOADED IN &lt;script&gt;" even if DebugMode is false.
+repeat task.wait() until NEX_Loaded
+print("Loaded with per-script debug logging.")</div>
+                    <div class="divider"></div>
+
+                    <h2>Injection Flow</h2>
+                    <p>The diagram below shows the exact decision tree NEX follows for each thread during a nexify pass. Every thread is visited at most once per pass (tracked via an internal seen-table).</p>
+                    <div class="code-block">nexify()
+ └─ for each thread in the Lua registry
+    ├─ already seen this pass?          → skip
+    ├─ env metatable is read-only?      → skip (abnormal/protected system thread)
+    │    └─ DebugMode: warn "abnormal thread"
+    └─ env.Protected_Environment == true?
+       ├─ YES → skip injection entirely
+       │    └─ DebugMode or ForceDebuggedEnvironment: warn "{script} IS PROTECTED"
+       └─ NO  → proceed
+            ├─ env.NEXLuau == true?
+            │   ├─ YES → set env.__index = nexenv
+            │   │         target = nexenv.std.NEXFunctions   (renv goes here)
+            │   │         nexenv.NEX_Loaded = true
+            │   └─ NO  → target = env
+            │             env.NEX_Loaded = true
+            ├─ inject all renv functions → target
+            ├─ env.ExternalThread == true?
+            │   └─ task.cancel(thread) → task.wait() → task.spawn(thread)
+            │        └─ DebugMode: warn "{script} is EXTERNAL"
+            └─ DebugMode or ForceDebuggedEnvironment: warn "NEX LOADED IN {script}"</div>
+
+                    <h2>Flag Combinations</h2>
+                    <table class="bin-table">
+                        <thead><tr><th>Flags set</th><th>Behaviour</th></tr></thead>
+                        <tbody>
+                            <tr><td><em>none</em></td><td>Standard injection — renv globals written directly into the script environment.</td></tr>
+                            <tr><td><span class="mono">NEXLuau</span></td><td>NEXLuau mode — env <span class="mono">__index</span> redirected to <span class="mono">nexenv</span>; renv placed in <span class="mono">nexenv.std.NEXFunctions</span>.</td></tr>
+                            <tr><td><span class="mono">ExternalThread</span></td><td>Standard injection + thread is cancelled and re-spawned after globals are set.</td></tr>
+                            <tr><td><span class="mono">NEXLuau</span> + <span class="mono">ExternalThread</span></td><td>NEXLuau mode with a re-spawned thread.</td></tr>
+                            <tr><td><span class="mono">Protected_Environment</span></td><td>No injection at all. Script runs as vanilla Roblox Luau.</td></tr>
+                            <tr><td><span class="mono">Protected_Environment</span> + <span class="mono">ForceDebuggedEnvironment</span></td><td>No injection, but logs "IS PROTECTED" to console.</td></tr>
+                            <tr><td><span class="mono">ForceDebuggedEnvironment</span></td><td>Standard injection with a per-script "NEX LOADED IN" console message.</td></tr>
+                        </tbody>
+                    </table>
+            </div>
+
+            <!-- ===== TAB 2: SETTINGS ===== -->
+            <div class="section">
+                <h1>Settings</h1>
+                <h3>Lua accessibility for settings</h3>
+                <div class="code-blockx">repeat task.wait() until NEX_Loaded
+print(Settings["Setting"])</div>
+                <p>Settings are persisted in <code>GameData/&lt;rootPlaceId&gt;/Settings.json</code> and the global <code>StarterSettings.json</code>. On first run or after a version update, missing keys are auto-populated from defaults.</p>
+                <div class="divider"></div>
+                <h3>CapabilityMax:number</h3>
+                <p>The maximum identity level scripts may pass to <code>setidentity</code>. Default: <code>2</code>. Increasing this allows emulated scripts to elevate privilege further.</p>
+                <div class="divider"></div>
+                <h3>FilesEnabled:boolean</h3>
+                <p>Master switch for all sandboxed file functions. Default: <code>true</code>. When <code>false</code>, all file APIs warn and return nothing.</p>
+                <div class="divider"></div>
+                <h3>EmulateOnGameIsLoaded:boolean</h3>
+                <p>When <code>true</code> (default), NEX waits for <code>game:IsLoaded()</code> before starting injection. Set to <code>false</code> to inject immediately.</p>
+                <div class="divider"></div>
+                <h3>HTTPEnabled:boolean</h3>
+                <p>Master switch for all HTTP functions including <code>request</code>, <code>requests.*</code>, and <code>NEXHttp.*</code>. Default: <code>true</code>.</p>
+                <div class="divider"></div>
+                <h3>XMLEnabled:boolean</h3>
+                <p>Enables XML-based instance creation via <code>roblox.XML.Object</code> and <code>roblox.XML.Load</code>. Default: <code>true</code>. Disabling prevents any XML deserialization.</p>
+                <div class="divider"></div>
+                <h3>RobloxScriptRequire:boolean</h3>
+                <p>When <code>true</code> (default), exposes the Roblox environment's native <code>require</code> as <code>Rrequire</code>. When <code>false</code>, a stub warning function is exposed instead.</p>
+                <div class="divider"></div>
+                <h3>ExternalFilePerms:boolean</h3>
+                <p>When <code>true</code>, populates the <code>ExternalFileFunctions</code> table with raw, unsandboxed exploit file functions. Default: <code>false</code>. These are not restricted to the game storage directory.</p>
+                <div class="divider"></div>
+                <h3>DebugMode:boolean</h3>
+                <p>Enables verbose <code>warn()</code> output during injection, reporting protected threads, external threads, and successful NEX loads. Default: <code>false</code>.</p>
+            </div>
+
+            <!-- ===== TAB 3: ROBLOX BINARY ===== -->
+            <div class="section">
+                <h1>Roblox Binary Format</h1>
+                <p>This tab documents the Roblox binary model format (<code>.rbxm</code> / <code>.rbxl</code>) — the on-disk representation of Roblox instance trees. NEX uses this format internally when converting between XML and binary via <code>BinaryFormat.XMLToBinary</code> / <code>BinaryFormat.BinaryToXML</code>, and detects it via the magic bytes checked by <code>roblox.BinaryFormat.XMLType</code>.</p>
+
+                <div class="info-box">
+                    Binary files begin with <span class="mono">3C 72 6F 62 6C 6F 78 21 89 FF 0D 0A 1A 0A</span> — the ASCII string <span class="mono">&lt;roblox!</span> followed by four special framing bytes. NEX's type detector checks only for the <span class="mono">&lt;roblox!</span> prefix (8 bytes) to distinguish binary from XML.
+                </div>
+
+                <h2>File Header</h2>
+                <p>Every binary file begins with a fixed 32-byte header before any chunks.</p>
+                <table class="byte-table">
+                    <thead><tr><th>Offset</th><th>Size</th><th>Type</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td class="mono">0x00</td><td>8 bytes</td><td>ASCII</td><td>Magic signature: <span class="mono">&lt;roblox!</span></td></tr>
+                        <tr><td class="mono">0x08</td><td>6 bytes</td><td>bytes</td><td>Framing bytes: <span class="mono">89 FF 0D 0A 1A 0A</span></td></tr>
+                        <tr><td class="mono">0x0E</td><td>2 bytes</td><td>uint16 LE</td><td>File format version (currently <code>0</code>)</td></tr>
+                        <tr><td class="mono">0x10</td><td>4 bytes</td><td>int32 LE</td><td>Number of unique instance classes in the file</td></tr>
+                        <tr><td class="mono">0x14</td><td>4 bytes</td><td>int32 LE</td><td>Total number of instances across all classes</td></tr>
+                        <tr><td class="mono">0x18</td><td>8 bytes</td><td>reserved</td><td>Always zero — reserved for future use</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Chunk Structure</h2>
+                <p>After the header, the file is a sequence of self-describing chunks. Each chunk carries its own name, sizes, and payload. Chunks repeat until an <span class="chunk-tag">END·</span> chunk is reached.</p>
+                <table class="byte-table">
+                    <thead><tr><th>Offset</th><th>Size</th><th>Type</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td class="mono">+0</td><td>4 bytes</td><td>ASCII</td><td>Chunk type tag, e.g. <code>INST</code>, <code>PROP</code>, <code>PRNT</code></td></tr>
+                        <tr><td class="mono">+4</td><td>4 bytes</td><td>int32 LE</td><td>Compressed payload size. <code>0</code> = data is stored uncompressed.</td></tr>
+                        <tr><td class="mono">+8</td><td>4 bytes</td><td>int32 LE</td><td>Uncompressed (logical) size in bytes</td></tr>
+                        <tr><td class="mono">+12</td><td>4 bytes</td><td>reserved</td><td>Always zero</td></tr>
+                        <tr><td class="mono">+16</td><td>varies</td><td>bytes</td><td>Payload — LZ4-compressed if compressed size &gt; 0, otherwise raw</td></tr>
+                    </tbody>
+                </table>
+                <div class="info-box">
+                    <strong>Compression:</strong> When the compressed size field is non-zero, the payload is LZ4 block-compressed. Decompress to the declared uncompressed size before parsing. When compressed size is <code>0</code>, the payload length equals the uncompressed size and is stored verbatim.
+                </div>
+
+                <h2>Chunk Types</h2>
+
+                <h3><span class="chunk-tag">META</span> Metadata</h3>
+                <p>Stores arbitrary key-value string pairs (e.g. the Studio version that exported the file). Usually the first chunk present.</p>
+                <div class="code-block">uint32   entry_count
+for each entry:
+    string   key    (uint32 length + UTF-8 bytes)
+    string   value  (uint32 length + UTF-8 bytes)</div>
+
+                <h3><span class="chunk-tag">SSTR</span> Shared Strings</h3>
+                <p>A deduplicated pool of binary blobs referenced by <code>SharedString</code> properties. Properties store only a 16-byte MD5 hash; the actual data lives here.</p>
+                <div class="code-block">uint32     version       (always 0)
+uint32     entry_count
+for each entry:
+    bytes[16]  md5_hash   (raw 16-byte digest, used as lookup key)
+    string     data        (uint32 length + raw bytes)</div>
+
+                <h3><span class="chunk-tag">INST</span> Instance Class Declaration</h3>
+                <p>Declares all instances of a single class and assigns them a local numeric Class ID used throughout the file. One chunk per unique class name.</p>
+                <div class="code-block">int32    class_id         (0-based index for this chunk)
+string   class_name        (uint32 length + bytes)
+uint8    is_service        (1 if this class is a Roblox service)
+int32    instance_count
+int32[]  referents         (interleaved zigzag delta-encoded; one per instance)
+-- if is_service == 1, also:
+string[] service_names     (one per instance)</div>
+
+                <h3><span class="chunk-tag">PROP</span> Property Values</h3>
+                <p>Stores values for one property across all instances of one class. One chunk per (class, property) pair.</p>
+                <div class="code-block">int32    class_id         (matches a previously declared INST class_id)
+string   property_name     (uint32 length + bytes)
+uint8    type_id           (see Property Type IDs table)
+&lt;array of N values — one per instance in the class, type-specific encoding&gt;</div>
+
+                <h3><span class="chunk-tag">PRNT</span> Parent Relationships</h3>
+                <p>Declares the entire parent-child tree. Covers every instance in the file in one chunk.</p>
+                <div class="code-block">uint8    version          (always 0)
+int32    instance_count
+int32[]  child_referents   (interleaved zigzag delta-encoded)
+int32[]  parent_referents  (interleaved zigzag delta-encoded; -1 = root / no parent)</div>
+
+                <h3><span class="chunk-tag">END·</span> End of File</h3>
+                <p>Marks the end of all chunks. The payload is always the 9-byte ASCII string <span class="mono">&lt;/roblox&gt;</span>. No chunks follow.</p>
+
+                <h2>Data Encodings</h2>
+                <p>Roblox uses several non-obvious encoding strategies to improve LZ4 compression ratios across the bulk data arrays.</p>
+
+                <h3>Length-Prefixed Strings</h3>
+                <p>All strings are stored as a little-endian <code>uint32</code> byte-count followed immediately by the raw bytes. There is no null terminator.</p>
+                <div class="code-block">uint32  length    -- number of bytes that follow
+bytes   data      -- `length` raw bytes (UTF-8 or binary)</div>
+
+                <h3>Interleaved Integer Arrays</h3>
+                <p>Arrays of <code>int32</code> values use a byte-interleaving scheme: all first bytes of each integer are stored together, then all second bytes, and so on. This groups similar bytes together, dramatically improving compression of correlated data like referent sequences.</p>
+                <div class="code-block">-- Given N int32 values → 4*N bytes stored as:
+-- byte[0], byte[0+N], byte[0+2N], byte[0+3N],
+-- byte[1], byte[1+N], byte[1+2N], byte[1+3N], ...
+-- (i.e. byte columns first, not rows)</div>
+                <p>After de-interleaving, each integer is also zigzag-decoded: the raw bytes encode the value with the sign bit rotated to the least-significant position, keeping small-magnitude integers (positive and negative) small in binary.</p>
+                <div class="code-block">-- Zigzag decode:
+value = (raw_uint32 >> 1) XOR -(raw_uint32 AND 1)
+-- Positive N encodes as 2*N, negative N as 2*(-N) - 1</div>
+
+                <h3>Referent Delta Encoding</h3>
+                <p>Referent arrays (instance IDs in <span class="chunk-tag">INST</span> and <span class="chunk-tag">PRNT</span> chunks) are additionally delta-encoded before interleaving. Each stored value is the difference from the previous referent, not the absolute ID. The first value is stored as-is. Since instances are usually assigned sequential IDs, deltas are almost always <code>+1</code>, yielding near-perfect compression.</p>
+                <div class="code-block">-- Encoding:
+prev = 0
+for i = 1 to N:
+    delta = referent[i] - prev
+    store zigzag(delta)
+    prev = referent[i]
+
+-- Decoding:
+prev = 0
+for i = 1 to N:
+    referent[i] = prev + zigzag_decode(raw[i])
+    prev = referent[i]</div>
+
+                <h3>Interleaved Float Arrays</h3>
+                <p>Arrays of <code>float32</code> values use the same byte-interleaving, but with a <em>sign-bit rotation</em> rather than zigzag. The sign bit is rotated to the least-significant position so that floats near zero (common for positions) pack tightly into few distinct byte values.</p>
+                <div class="code-block">-- Encoding (rotate float bits left by 1):
+bits    = reinterpret_cast&lt;uint32&gt;(float_value)
+stored  = (bits &lt;&lt; 1) | (bits >> 31)   -- rotate left
+
+-- Decoding (rotate right by 1):
+bits    = (stored >> 1) | ((stored &amp; 1) &lt;&lt; 31)
+value   = reinterpret_cast&lt;float&gt;(bits)</div>
+
+                <h2>Property Type IDs</h2>
+                <p>The <code>type_id</code> byte in each <span class="chunk-tag">PROP</span> chunk identifies the encoding of the value array. Key type IDs:</p>
+                <table class="byte-table">
+                    <thead><tr><th>ID</th><th>Name</th><th>Encoding</th></tr></thead>
+                    <tbody>
+                        <tr><td class="mono">0x01</td><td>String</td><td>Array of length-prefixed strings</td></tr>
+                        <tr><td class="mono">0x02</td><td>Bool</td><td>Array of <code>uint8</code> (0 or 1)</td></tr>
+                        <tr><td class="mono">0x03</td><td>Int32</td><td>Interleaved zigzag int32 array</td></tr>
+                        <tr><td class="mono">0x04</td><td>Float</td><td>Interleaved sign-rotated float32 array</td></tr>
+                        <tr><td class="mono">0x05</td><td>Double</td><td>Array of raw little-endian float64</td></tr>
+                        <tr><td class="mono">0x06</td><td>UDim</td><td>Interleaved Scale floats then Offset int32s</td></tr>
+                        <tr><td class="mono">0x07</td><td>UDim2</td><td>Interleaved ScaleX/ScaleY floats, then OffsetX/OffsetY int32s</td></tr>
+                        <tr><td class="mono">0x08</td><td>Ray</td><td>Interleaved: origin XYZ + direction XYZ float arrays</td></tr>
+                        <tr><td class="mono">0x09</td><td>Faces</td><td>Array of <code>uint8</code> bitfield (Right=1, Top=2, Back=4, Left=8, Bottom=16, Front=32)</td></tr>
+                        <tr><td class="mono">0x0A</td><td>Axes</td><td>Array of <code>uint8</code> bitfield (X=1, Y=2, Z=4)</td></tr>
+                        <tr><td class="mono">0x0B</td><td>BrickColor</td><td>Interleaved int32 palette index array</td></tr>
+                        <tr><td class="mono">0x0C</td><td>Color3</td><td>Interleaved R, G, B float arrays</td></tr>
+                        <tr><td class="mono">0x0D</td><td>Vector2</td><td>Interleaved X, Y float arrays</td></tr>
+                        <tr><td class="mono">0x0E</td><td>Vector3</td><td>Interleaved X, Y, Z float arrays</td></tr>
+                        <tr><td class="mono">0x10</td><td>CFrame</td><td>Per-value rotation ID byte + optional 9-float matrix; then interleaved X/Y/Z position floats for all values (see below)</td></tr>
+                        <tr><td class="mono">0x12</td><td>Enum / token</td><td>Interleaved uint32 array (enum integer value)</td></tr>
+                        <tr><td class="mono">0x13</td><td>Ref</td><td>Interleaved delta-encoded referent array; <code>-1</code> = null reference</td></tr>
+                        <tr><td class="mono">0x14</td><td>Vector3int16</td><td>Three raw <code>int16 LE</code> per value (X, Y, Z)</td></tr>
+                        <tr><td class="mono">0x15</td><td>NumberSequence</td><td>uint32 keypoint count, then (time, value, envelope) float triples</td></tr>
+                        <tr><td class="mono">0x16</td><td>ColorSequence</td><td>uint32 keypoint count, then (time, R, G, B, 0) float tuples</td></tr>
+                        <tr><td class="mono">0x17</td><td>NumberRange</td><td>Two raw <code>float32 LE</code> (min, max)</td></tr>
+                        <tr><td class="mono">0x18</td><td>Rect2D</td><td>Interleaved MinX, MinY, MaxX, MaxY float arrays</td></tr>
+                        <tr><td class="mono">0x19</td><td>PhysicalProperties</td><td><code>uint8</code> custom flag; if 1, five raw <code>float32 LE</code> follow (density, friction, elasticity, frictionWeight, elasticityWeight)</td></tr>
+                        <tr><td class="mono">0x1A</td><td>Color3uint8</td><td>Three bytes per value: R, G, B (0–255, stored as packed uint32 internally: 0xFF000000 + R*65536 + G*256 + B)</td></tr>
+                        <tr><td class="mono">0x1B</td><td>Int64</td><td>Interleaved zigzag int64 array</td></tr>
+                        <tr><td class="mono">0x1C</td><td>SharedString</td><td>Interleaved uint32 index array into the <span class="chunk-tag">SSTR</span> pool</td></tr>
+                        <tr><td class="mono">0x1E</td><td>UniqueId</td><td>Interleaved arrays: random int32, time int32, index int32</td></tr>
+                        <tr><td class="mono">0x1F</td><td>Font</td><td>Length-prefixed string (family URL) + uint16 weight + uint8 style</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>CFrame Special Encoding</h2>
+                <p>CFrame values receive extra treatment because their rotation can often be described by a single lookup-table index rather than a full 9-component matrix. This saves space for axis-aligned objects, which are the majority of parts in most games.</p>
+                <div class="code-block">-- For each of N CFrame values:
+uint8  rotation_id
+if rotation_id == 0:
+    float32[9]  rotation_matrix  (raw little-endian, NOT interleaved)
+-- else: rotation is looked up from a 36-entry canonical table
+
+-- After all per-value rotation data:
+float32[]  X  (interleaved sign-rotated, all N values)
+float32[]  Y  (interleaved sign-rotated, all N values)
+float32[]  Z  (interleaved sign-rotated, all N values)</div>
+                <p>The 36 canonical orientations (IDs 2–36) cover all possible axis-aligned CFrame rotations used for snapped parts. ID <code>0x02</code> is the identity rotation. ID <code>0</code> means a custom non-axis-aligned rotation follows inline as a raw 9-float matrix.</p>
+
+                <h2>Deserialization Pipeline in NEX</h2>
+                <p>When NEX loads a Roblox asset or local file that may be in binary format, the following pipeline is used:</p>
+                <div class="code-block">1. Receive raw data string (from local file, HTTP, or asset delivery CDN)
+
+2. Detect format:
+   roblox.BinaryFormat.XMLType(data)
+   → "binary"  → roblox.BinaryFormat.BinaryToXML(data)
+                  returns equivalent XML string
+   → "xml"     → use data directly (optionally FixStudioXML first)
+   → "unknown" → error / unsupported
+
+3. Deserialize:
+   SerializationService:DeserializeInstancesAsync(
+       buffer.fromstring(xmlString)
+   )
+   returns a table of root Instances
+
+4. Optional Studio-export fix (for GetLocalObjects and GetObjects):
+   roblox.BinaryFormat.FixStudioXML(xml)
+   patches:  Workspace class → Model
+             Terrain  class → Folder</div>
+                <div class="info-box">
+                    <strong>Why convert to XML first?</strong> Roblox's <code>SerializationService:DeserializeInstancesAsync</code> accepts both formats via a buffer, but NEX's BinaryFormat layer provides a Luau-level round-trip, enabling inspection and modification of the data as a table structure via <code>roblox.XML.XMLToTable</code> before materializing into live instances.
+                </div>
+
+                <h2>XML ↔ Binary Type Correspondence</h2>
+                <p>NEX's internal <code>typemap</code> handles encoding and decoding of every Roblox value type between XML tag format and binary. The same map drives both <code>roblox.XML.TableToXML</code> and the binary serializer's type dispatch:</p>
+                <table class="byte-table">
+                    <thead><tr><th>XML Tag</th><th>Binary Type ID</th><th>Notes</th></tr></thead>
+                    <tbody>
+                        <tr><td class="mono">Vector3</td><td class="mono">0x0E</td><td>X/Y/Z as &lt;X&gt;&lt;Y&gt;&lt;Z&gt; tags; interleaved floats in binary</td></tr>
+                        <tr><td class="mono">Vector2</td><td class="mono">0x0D</td><td>X/Y tags; interleaved floats</td></tr>
+                        <tr><td class="mono">Vector3int16</td><td class="mono">0x14</td><td>X/Y/Z integer tags; raw int16 LE triplets in binary</td></tr>
+                        <tr><td class="mono">Vector2int16</td><td class="mono">— </td><td>X/Y integer tags; stored as Vector2 variant</td></tr>
+                        <tr><td class="mono">CFrame / CoordinateFrame</td><td class="mono">0x10</td><td>12 component tags (X,Y,Z,R00–R22); rotation ID + optional matrix + interleaved position in binary</td></tr>
+                        <tr><td class="mono">UDim</td><td class="mono">0x06</td><td>&lt;S&gt; scale, &lt;O&gt; offset; interleaved separately</td></tr>
+                        <tr><td class="mono">UDim2</td><td class="mono">0x07</td><td>&lt;XS&gt;&lt;XO&gt;&lt;YS&gt;&lt;YO&gt;; four interleaved arrays</td></tr>
+                        <tr><td class="mono">Rect2D</td><td class="mono">0x18</td><td>&lt;min&gt;&lt;max&gt; with X/Y; interleaved float arrays</td></tr>
+                        <tr><td class="mono">Color3</td><td class="mono">0x0C</td><td>&lt;R&gt;&lt;G&gt;&lt;B&gt; float tags; interleaved float arrays</td></tr>
+                        <tr><td class="mono">Color3uint8</td><td class="mono">0x1A</td><td>Packed as uint32 (0xFF000000+R*65536+G*256+B) in XML; three bytes per value in binary</td></tr>
+                        <tr><td class="mono">NumberRange</td><td class="mono">0x17</td><td>Space-separated "min max" string; two raw float32 in binary</td></tr>
+                        <tr><td class="mono">NumberSequence</td><td class="mono">0x15</td><td>Space-separated "t v e" triples; count + float array in binary</td></tr>
+                        <tr><td class="mono">ColorSequence</td><td class="mono">0x16</td><td>Space-separated "t R G B 0" tuples; count + float array (trailing 0 preserved)</td></tr>
+                        <tr><td class="mono">PhysicalProperties</td><td class="mono">0x19</td><td>Five float tags or "null"; flag byte + optional floats in binary</td></tr>
+                        <tr><td class="mono">Faces</td><td class="mono">0x09</td><td>Integer bitfield in both formats (Right=1, Top=2, Back=4, Left=8, Bottom=16, Front=32)</td></tr>
+                        <tr><td class="mono">Axes</td><td class="mono">0x0A</td><td>Integer bitfield (X=1, Y=2, Z=4)</td></tr>
+                        <tr><td class="mono">BinaryString / ProtectedString</td><td class="mono">0x01</td><td>CDATA in XML; length-prefixed bytes in binary</td></tr>
+                        <tr><td class="mono">SharedString</td><td class="mono">0x1C</td><td>MD5 key string in XML; SSTR pool index in binary</td></tr>
+                        <tr><td class="mono">Ref</td><td class="mono">0x13</td><td>"null" string in XML; -1 sentinel in binary; referent strings remapped to NEX1/NEX2/… on TableToXML</td></tr>
+                        <tr><td class="mono">token (Enum)</td><td class="mono">0x12</td><td>Integer value in both formats; rounded to nearest integer on encode</td></tr>
+                        <tr><td class="mono">bool</td><td class="mono">0x02</td><td>"true"/"false" string in XML; uint8 0/1 in binary</td></tr>
+                        <tr><td class="mono">int / int64</td><td class="mono">0x03 / 0x1B</td><td>Integer string in XML; interleaved zigzag array in binary</td></tr>
+                        <tr><td class="mono">float / double</td><td class="mono">0x04 / 0x05</td><td>Float string in XML; interleaved rotated float32 or raw float64 in binary</td></tr>
+                        <tr><td class="mono">UniqueId</td><td class="mono">0x1E</td><td>Hex string in XML; three interleaved int32 arrays in binary</td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </main>
+</div>
+<script>
+    const nav = document.querySelectorAll('.nav-item');
+    const wrapper = document.querySelector('.sections-wrapper');
+    const sections = document.querySelectorAll('.section');
+    const highlight = document.querySelector('.nav-highlight');
+
+    function updateHighlight(el) {
+        highlight.style.top = el.offsetTop + 'px';
+        highlight.style.left = el.offsetLeft + 'px';
+        highlight.style.width = el.offsetWidth + 'px';
+        highlight.style.height = el.offsetHeight + 'px';
+    }
+
+    function switchTab(idx) {
+        nav.forEach(n => n.classList.remove('active'));
+        nav[idx].classList.add('active');
+        updateHighlight(nav[idx]);
+        sections.forEach(s => s.classList.remove('active'));
+        wrapper.style.transform = `translateX(-${idx * 100}%)`;
+        setTimeout(() => sections[idx].classList.add('active'), 50);
+    }
+
+    nav.forEach((item, idx) => item.addEventListener('click', (e) => { e.preventDefault(); switchTab(idx); }));
+    updateHighlight(nav[0]);
+    sections[0].classList.add('active');
+
+    function usyntax() {
+        function escHtml(s) {
+            return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         }
-
-        function switchTab(idx) {
-            nav.forEach(n => n.classList.remove('active'));
-            nav[idx].classList.add('active');
-            updateHighlight(nav[idx]);
-            sections.forEach(s => s.classList.remove('active'));
-            wrapper.style.transform = `translateX(-${idx * 100}%)`;
-            setTimeout(() => sections[idx].classList.add('active'), 50);
-            currentTab = idx;
-        }
-
-        nav.forEach((item, idx) => {
-            item.addEventListener('click', () => switchTab(idx));
-        });
-
-        updateHighlight(nav[0]);
-        sections[0].classList.add('active');
-
-        function usyntax() {
-            const blocks = document.querySelectorAll('.code-blockx');
-            for (let i = 0; i < blocks.length; i++) {
-                let code = blocks[i].textContent;
-                let result = '';
-                let pos = 0;
-                const tokens = [];
-                let m;
-                const stringMatch = /"[^"]*"/g;
-                while ((m = stringMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'string', val: m[0]});
-                const commentMatch = /--.*$/gm;
-                while ((m = commentMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'comment', val: m[0]});
-                const keywordMatch = /\b(local|function|end|if|then|else|elseif|for|while|do|repeat|until|return|break|in|and|or|not)\b/g;
-                while ((m = keywordMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'keyword', val: m[0]});
-                const builtinMatch = /\b(print|pairs|ipairs|tonumber|tostring|type|pcall|require|getmetatable|setmetatable|warn|typeof)\b/g;
-                while ((m = builtinMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'builtin', val: m[0]});
-                const numberMatch = /\b(\d+)\b/g;
-                while ((m = numberMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'number', val: m[0]});
-                const boolMatch = /\b(true|false|nil)\b/g;
-                while ((m = boolMatch.exec(code)) !== null) tokens.push({start: m.index, end: m.index + m[0].length, type: 'bool', val: m[0]});
-                tokens.sort((a, b) => a.start - b.start);
-                const final = [];
-                for (let j = 0; j < tokens.length; j++) {
-                    const tok = tokens[j];
-                    let overlap = false;
-                    for (let k = 0; k < final.length; k++) {
-                        if (tok.start < final[k].end && tok.end > final[k].start) { overlap = true; break; }
-                    }
-                    if (!overlap) final.push(tok);
-                }
-                final.sort((a, b) => a.start - b.start);
-                for (let j = 0; j < final.length; j++) {
-                    const tok = final[j];
-                    result += code.substring(pos, tok.start);
-                    if (tok.type === 'string') result += '<span style="color:#CE9178">' + tok.val + '</span>';
-                    else if (tok.type === 'comment') result += '<span style="color:#6A9955">' + tok.val + '</span>';
-                    else if (tok.type === 'keyword') result += '<span style="color:#C586C0">' + tok.val + '</span>';
-                    else if (tok.type === 'builtin') result += '<span style="color:#DCDCAA">' + tok.val + '</span>';
-                    else if (tok.type === 'number') result += '<span style="color:#B5CEA8">' + tok.val + '</span>';
-                    else if (tok.type === 'bool') result += '<span style="color:#569CD6">' + tok.val + '</span>';
-                    pos = tok.end;
-                }
-                result += code.substring(pos);
-                blocks[i].innerHTML = result;
+        const blocks = document.querySelectorAll('.code-blockx');
+        for (let i = 0; i < blocks.length; i++) {
+            let code = blocks[i].textContent;
+            let result = '', pos = 0;
+            const tokens = [];
+            let m;
+            const stringMatch = /"[^"]*"/g;
+            while ((m = stringMatch.exec(code)) !== null) tokens.push({start:m.index,end:m.index+m[0].length,type:'string',val:m[0]});
+            const commentMatch = /--.*$/gm;
+            while ((m = commentMatch.exec(code)) !== null) tokens.push({start:m.index,end:m.index+m[0].length,type:'comment',val:m[0]});
+            const keywordMatch = /\b(local|function|end|if|then|else|elseif|for|while|do|repeat|until|return|break|in|and|or|not)\b/g;
+            while ((m = keywordMatch.exec(code)) !== null) tokens.push({start:m.index,end:m.index+m[0].length,type:'keyword',val:m[0]});
+            const builtinMatch = /\b(print|pairs|ipairs|tonumber|tostring|type|pcall|require|getmetatable|setmetatable|warn|typeof)\b/g;
+            while ((m = builtinMatch.exec(code)) !== null) tokens.push({start:m.index,end:m.index+m[0].length,type:'builtin',val:m[0]});
+            const numberMatch = /\b(\d+)\b/g;
+            while ((m = numberMatch.exec(code)) !== null) tokens.push({start:m.index,end:m.index+m[0].length,type:'number',val:m[0]});
+            const boolMatch = /\b(true|false|nil)\b/g;
+            while ((m = boolMatch.exec(code)) !== null) tokens.push({start:m.index,end:m.index+m[0].length,type:'bool',val:m[0]});
+            tokens.sort((a,b)=>a.start-b.start);
+            const final=[];
+            for (let j=0;j<tokens.length;j++) {
+                const tok=tokens[j]; let overlap=false;
+                for (let k=0;k<final.length;k++) { if (tok.start<final[k].end&&tok.end>final[k].start){overlap=true;break;} }
+                if (!overlap) final.push(tok);
             }
-        }
-        usyntax();
-
-        const tagInfo = {
-            'FilesEnabled': {
-                title: 'FilesEnabled',
-                desc: 'This setting must be enabled to use file system functions. Controls access to local file operations.',
-                funcs: ['LoadLocalAsset', 'getcustomasset', 'readfile', 'writefile', 'makefolder', 'deletefile', 'deletefolder', 'isfile', 'isfolder', 'appendfile', 'listfiles', 'loadfile']
-            },
-            'ExternalFilePerms': {
-                title: 'ExternalFilePerms',
-                desc: 'Additional permission required for external file operations. Must be enabled alongside FilesEnabled for most file functions.',
-                funcs: ['getcustomasset', 'readfile', 'writefile', 'makefolder', 'deletefile', 'deletefolder', 'isfile', 'isfolder', 'appendfile', 'listfiles', 'loadfile']
-            },
-            'HTTPEnabled': {
-                title: 'HTTPEnabled',
-                desc: 'Enables HTTP request functionality. Required for making web requests to external servers.',
-                funcs: ['request']
-            },
-            'CapabilityMax': {
-                title: 'CapabilityMax',
-                desc: 'Controls the maximum identity level that can be set. Determines the highest privilege level available.',
-                funcs: ['setidentity']
-            },
-            'RobloxScriptRequire': {
-                title: 'RobloxScriptRequire',
-                desc: 'Enables the ability to require RobloxScript modules from CorePackages and other protected locations.',
-                funcs: ['Rrequire']
+            final.sort((a,b)=>a.start-b.start);
+            for (let j=0;j<final.length;j++) {
+                const tok=final[j];
+                result+=escHtml(code.substring(pos,tok.start));
+                const v=escHtml(tok.val);
+                if (tok.type==='string') result+='<span style="color:#CE9178">'+v+'</span>';
+                else if (tok.type==='comment') result+='<span style="color:#6A9955">'+v+'</span>';
+                else if (tok.type==='keyword') result+='<span style="color:#C586C0">'+v+'</span>';
+                else if (tok.type==='builtin') result+='<span style="color:#DCDCAA">'+v+'</span>';
+                else if (tok.type==='number') result+='<span style="color:#B5CEA8">'+v+'</span>';
+                else if (tok.type==='bool') result+='<span style="color:#569CD6">'+v+'</span>';
+                pos=tok.end;
             }
-        };
+            result+=escHtml(code.substring(pos));
+            blocks[i].innerHTML=result;
+        }
+    }
+    usyntax();
 
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        document.body.appendChild(tooltip);
+    const tagInfo = {
+        'FilesEnabled': {
+            title: 'FilesEnabled',
+            desc: 'Must be enabled to use any sandboxed file functions. All paths are restricted to the game storage directory. Does not affect ExternalFileFunctions.',
+            funcs: ['LoadLocalAsset','OpenFile','getcustomasset','readfile','writefile','makefolder','deletefile','deletefolder','isfile','isfolder','appendfile','listfiles','loadfile','readline','writeline','typefile','NEXHttp.download','git.clone','roblox.DownloadAsset']
+        },
+        'ExternalFilePerms': {
+            title: 'ExternalFilePerms',
+            desc: 'Populates the ExternalFileFunctions table with raw unsandboxed exploit file functions that can access the full filesystem. Does NOT affect the sandboxed file functions — those only require FilesEnabled.',
+            funcs: ['ExternalFileFunctions']
+        },
+        'HTTPEnabled': {
+            title: 'HTTPEnabled',
+            desc: 'Enables all HTTP request functionality. Required for web requests to external servers.',
+            funcs: ['request','requests.get','requests.post','requests.put','requests.patch','requests.delete','requests.options','NEXHttp.streamget']
+        },
+        'CapabilityMax': {
+            title: 'CapabilityMax',
+            desc: 'Controls the maximum identity level setidentity may set. Scripts cannot elevate beyond this value.',
+            funcs: ['setidentity']
+        },
+        'RobloxScriptRequire': {
+            title: 'RobloxScriptRequire',
+            desc: 'Enables Rrequire, which exposes the native Roblox environment require function for loading protected CorePackage modules.',
+            funcs: ['Rrequire']
+        }
+    };
 
-        let tooltipTimeout;
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    document.body.appendChild(tooltip);
+    let tooltipTimeout;
 
-        document.querySelectorAll('h3p').forEach(tag => {
-            const tagName = tag.textContent.trim();
-            const info = tagInfo[tagName];
-            if (!info) return;
-
-            const showTooltip = (e) => {
-                clearTimeout(tooltipTimeout);
-                const funcList = info.funcs.map(f => `<span>${f}</span>`).join(', ');
-                tooltip.innerHTML = `
-                    <div class="tooltip-title">${info.title}</div>
-                    <div class="tooltip-desc">${info.desc}</div>
-                    <div class="tooltip-funcs">Used by: ${funcList}</div>
-                `;
-                
-                const rect = tag.getBoundingClientRect();
-                let left = rect.left;
-                let top = rect.bottom + 10;
-                
-                tooltip.style.left = left + 'px';
-                tooltip.style.top = top + 'px';
-                tooltip.classList.add('visible');
-                
-                requestAnimationFrame(() => {
-                    const tooltipRect = tooltip.getBoundingClientRect();
-                    if (tooltipRect.right > window.innerWidth - 20) {
-                        tooltip.style.left = (window.innerWidth - tooltipRect.width - 20) + 'px';
-                    }
-                    if (tooltipRect.bottom > window.innerHeight - 20) {
-                        tooltip.style.top = (rect.top - tooltipRect.height - 10) + 'px';
-                    }
-                });
-            };
-
-            const hideTooltip = () => {
-                tooltipTimeout = setTimeout(() => {
-                    tooltip.classList.remove('visible');
-                }, 100);
-            };
-
-            tag.addEventListener('mouseenter', showTooltip);
-            tag.addEventListener('mouseleave', hideTooltip);
-            tag.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (tooltip.classList.contains('visible')) {
-                    hideTooltip();
-                } else {
-                    showTooltip(e);
-                }
+    document.querySelectorAll('h3p').forEach(tag => {
+        const info = tagInfo[tag.textContent.trim()];
+        if (!info) return;
+        const showTooltip = (e) => {
+            clearTimeout(tooltipTimeout);
+            tooltip.innerHTML = `<div class="tooltip-title">${info.title}</div><div class="tooltip-desc">${info.desc}</div><div class="tooltip-funcs">Used by: ${info.funcs.map(f=>`<span>${f}</span>`).join(', ')}</div>`;
+            const rect = tag.getBoundingClientRect();
+            tooltip.style.left = rect.left + 'px';
+            tooltip.style.top = (rect.bottom + 10) + 'px';
+            tooltip.classList.add('visible');
+            requestAnimationFrame(() => {
+                const tr = tooltip.getBoundingClientRect();
+                if (tr.right > window.innerWidth - 20) tooltip.style.left = (window.innerWidth - tr.width - 20) + 'px';
+                if (tr.bottom > window.innerHeight - 20) tooltip.style.top = (rect.top - tr.height - 10) + 'px';
             });
-        });
-
-        document.addEventListener('scroll', () => tooltip.classList.remove('visible'), true);
-    </script>
+        };
+        const hideTooltip = () => { tooltipTimeout = setTimeout(() => tooltip.classList.remove('visible'), 100); };
+        tag.addEventListener('mouseenter', showTooltip);
+        tag.addEventListener('mouseleave', hideTooltip);
+        tag.addEventListener('touchstart', (e) => { e.preventDefault(); tooltip.classList.contains('visible') ? hideTooltip() : showTooltip(e); });
+    });
+    document.addEventListener('scroll', () => tooltip.classList.remove('visible'), true);
+</script>
 </body>
 </html>
