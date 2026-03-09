@@ -299,7 +299,7 @@ print(getfilename("Folder/MyScript.lua", true))    -- "MyScript"</div>
                 <div class="divider"></div>
 
                 <h3>ToastNotify(options:table):null</h3>
-                <p>Sends a native toast notification via <code>GuiService:SendNotification</code>. Accepts <code>Title</code>, <code>Text</code>, and <code>Icon</code> fields. If <code>Icon</code> is a URL containing <code>://</code> (such as a full <code>rbxassetid://</code> URI), it is automatically stripped to <code>nil</code> — use a raw numeric ID string instead.</p>
+                <p>Sends a native toast notification via <code>GuiService:SendNotification</code>. Accepts <code>Title</code>, <code>Text</code>, and <code>Icon</code> fields.</p>
                 <h3>Example Usage</h3>
                 <div class="code-blockx">repeat task.wait() until NEX_Loaded
 ToastNotify({
